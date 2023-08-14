@@ -1,0 +1,32 @@
+# Reference: https://kind.sigs.k8s.io/docs/user/configuration/
+
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+
+name: default.kind.local
+
+networking:
+  # WARNING: It is _strongly_ recommended that you keep this the default
+  # (127.0.0.1) for security reasons. However it is possible to change this.
+  apiServerAddress: "127.0.0.1"
+  # By default the API server listens on a random open port.
+  # You may choose a specific port but probably don't need to in most cases.
+  # Using a random port makes it easier to spin up multiple clusters.
+  apiServerPort: 6443
+  # Uncomment the following lines to use Calico
+  #disableDefaultCNI: true # disable kindnet
+  #podSubnet: 192.168.0.0/16 # set to Calico's default subnet
+
+nodes:
+
+- role: control-plane
+  image: kindest/node:v1.27.2@sha256:3966ac761ae0136263ffdb6cfd4db23ef8a83cba8a463690e98317add2c9ba72
+  labels:
+    cluster-target: default.kind.local
+    cluster-role: master
+
+- role: worker
+  image: kindest/node:v1.27.2@sha256:3966ac761ae0136263ffdb6cfd4db23ef8a83cba8a463690e98317add2c9ba72
+  labels:
+    cluster-target: default.kind.local
+    cluster-role: node
