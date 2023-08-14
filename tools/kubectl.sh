@@ -29,6 +29,7 @@ k8kreator-tools-install-kubectl() {
 
 k8kreator-tools-select-kubectl() {
     local kubectl_version=$1
+    k8kreator-check-deps "rm" "ln"
     rm -f ${K8KREATOR_HOME}/bin/kubectl
     ln -s ${K8KREATOR_HOME}/bin/kubectl-${kubectl_version} ${K8KREATOR_HOME}/bin/kubectl
 }
