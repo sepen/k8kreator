@@ -31,7 +31,7 @@ k8kreator-tools-select-kind() {
     local kind_version=$1
     k8kreator-check-deps "rm" "ln"
     rm -f ${K8KREATOR_HOME}/bin/kind
-    ln -s ${K8KREATOR_HOME}/bin/kind-${kind_version} ${K8KREATOR_HOME}/bin/kind
+    ln -sf kind-${kind_version} ${K8KREATOR_HOME}/bin/kind
 }
 
 # End of file

@@ -35,7 +35,7 @@ k8kreator-tools-select-helm() {
     local helm_version=$1
     k8kreator-check-deps "rm" "ln"
     rm -f ${K8KREATOR_HOME}/bin/helm
-    ln -s ${K8KREATOR_HOME}/bin/helm-${helm_version} ${K8KREATOR_HOME}/bin/helm
+    ln -sf helm-${helm_version} ${K8KREATOR_HOME}/bin/helm
 }
 
 # End of file
