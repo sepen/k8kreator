@@ -55,7 +55,7 @@ k8kreator-self-install() {
    fi
    mkdir -p ${K8KREATOR_HOME}/bin ${K8KREATOR_HOME}/tmp
    git clone ${K8KREATOR_REPO} ${K8KREATOR_HOME}/src --quiet
-   ln -sf ../src/k8kreator ${K8KREATOR_HOME}/bin/k8kreator
+   ln -svf ../src/k8kreator ${K8KREATOR_HOME}/bin/k8kreator
    k8kreator-msg-info "Installed successfully!"
    k8kreator-msg-info "To finish do you need to add binaries to your PATH as for example:"
    k8kreator-msg-info "  export PATH=\$HOME/.k8kreator/bin:\$PATH"
@@ -76,10 +76,14 @@ k8kreator-self-update() {
 
 k8kreator-cluster-create() {
    k8kreator-msg-info "Running function k8kreator-cluster-create (${K8KREATOR_TARGET})"
+   source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/target.sh
+   k8kreator-cluter-create-target
 }
 
 k8kreator-cluster-delete() {
    k8kreator-msg-info "Running function k8kreator-cluster-delete (${K8KREATOR_TARGET})"
+   source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/target.sh
+   k8kreator-cluter-delete-target
 }
 
 # =============================================================================

@@ -2,7 +2,7 @@
 
 export K8KREATOR_TOOLS=("kind=0.20.0" "kubectl=1.27.4" "helm=3.12.3")
 
-k8kreator-cluster-install-target() {
+k8kreator-cluster-create-target() {
     local name=$1 config=$2
     k8kreator-check-deps "kind"
     k8kreator-msg-info "Creating cluster $1"
