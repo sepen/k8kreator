@@ -19,7 +19,7 @@ k8kreator-tools-install-kind() {
 
     kind_url="${kind_url}/kind-${system_os}-${system_arch}"
 
-    if [ -f ${K8KREATOR_HOME}/bin/kind-${kind_version} ]; then
+    if [ ! -f ${K8KREATOR_HOME}/bin/kind-${kind_version} ]; then
         k8kreator-check-deps "curl" "chmod"
         k8kreator-msg-info "Installing kind ${kind_version}"
         curl -s -L -o ${K8KREATOR_HOME}/bin/kind-${kind_version} ${kind_url}
