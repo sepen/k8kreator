@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 k8kreator-tools-install-helm() {
-
     local helm_version=$1
     local helm_url="https://get.helm.sh/helm-v${helm_version}"
     local system_uname=($(uname -m -s))

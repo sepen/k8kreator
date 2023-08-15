@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 k8kreator-tools-install-kubectl() {
-
     local kubectl_version=$1
     local kubectl_url="https://dl.k8s.io/release/v${kubectl_version}/bin"
     local system_uname=($(uname -m -s))

@@ -2,6 +2,15 @@
 
 **k8kreator** is a lightweight wrapper to setup up and manage Kubernetes clusters
 
+## Installation
+
+To install **k8kreator** paste that in a macOS Terminal or Linux shell prompt:
+```
+$ curl -fsSL https://raw.githubusercontent.com/sepen/k8kreator/main/k8kreator | bash -s self install
+```
+
+## Overview
+
 The idea behind **k8kreator** is to be able to run clusters with different Kubernetes engines and have a homogeneous way to install and maintain cluster addons. It was primarily designed for testing Kubernetes itself, but may be used for local development or CI (you can use it in production but it's not what it's designed for, so do it at your own risk).
 
 At this moment **k8kreator** supports the following Kubernetes engines:
