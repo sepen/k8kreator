@@ -76,13 +76,13 @@ k8kreator-self-update() {
 
 k8kreator-cluster-create() {
    k8kreator-msg-info "Running function k8kreator-cluster-create (${K8KREATOR_TARGET})"
-   source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/target.sh
+   source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
    k8kreator-cluter-create-target
 }
 
 k8kreator-cluster-delete() {
    k8kreator-msg-info "Running function k8kreator-cluster-delete (${K8KREATOR_TARGET})"
-   source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/target.sh
+   source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
    k8kreator-cluter-delete-target
 }
 
@@ -120,33 +120,33 @@ k8kreator-addons-uninstall() {
 
 k8kreator-tools-install() {
    k8kreator-msg-info "Running function k8kreator-tools-install (${K8KREATOR_TARGET})"
-   source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/target.sh
+   source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
    for tool in ${K8KREATOR_TOOLS[@]}; do
       tool_name=${tool%%=*}
       tool_version=${tool##*=}
-      source ${K8KREATOR_HOME}/tools/${tool_name}.sh
+      source ${K8KREATOR_HOME}/src/tools/${tool_name}.sh
       k8kreator-tools-install-${tool_name} ${tool_version}
    done
 }
 
 k8kreator-tools-select() {
    k8kreator-msg-info "Running function k8kreator-tools-select (${K8KREATOR_TARGET})"
-   source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/target.sh
+   source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
    for tool in ${K8KREATOR_TOOLS[@]}; do
       tool_name=${tool%%=*}
       tool_version=${tool##*=}
-      source ${K8KREATOR_HOME}/tools/${tool_name}.sh
+      source ${K8KREATOR_HOME}/src/tools/${tool_name}.sh
       k8kreator-tools-select-${tool_name} ${tool_version}
    done
 }
 
 k8kreator-tools-uninstall() {
    k8kreator-msg-info "Running function k8kreator-tools-uninstall (${K8KREATOR_TARGET})"
-   source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/target.sh
+   source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
    for tool in ${K8KREATOR_TOOLS[@]}; do
       tool_name=${tool%%=*}
       tool_version=${tool##*=}
-      source ${K8KREATOR_HOME}/tools/${tool_name}.sh
+      source ${K8KREATOR_HOME}/src/tools/${tool_name}.sh
       k8kreator-tools-uninstall-${tool_name} ${tool_version}
    done
 }
