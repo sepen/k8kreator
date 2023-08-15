@@ -24,7 +24,7 @@ k8kreator-tools-install-helm() {
         k8kreator-msg-info "Installing helm ${helm_version}"
         curl -s -L -o ${K8KREATOR_HOME}/tmp/helm-${helm_version}.tar.gz ${helm_url}
         mkdir -p ${K8KREATOR_HOME}/tmp/helm-${helm_version}
-        tar -C ${K8KREATOR_HOME}/tmp/helm-${helm_version} -xf ${K8KREATOR_HOME}/bin/helm-${helm_version}.tar.gz
+        tar -C ${K8KREATOR_HOME}/tmp/helm-${helm_version} -xf ${K8KREATOR_HOME}/tmp/helm-${helm_version}.tar.gz
         cp ${K8KREATOR_HOME}/tmp/helm-${helm_version}/${system_os}-${system_arch}/helm ${K8KREATOR_HOME}/bin/helm-${helm_version}
         chmod +x ${K8KREATOR_HOME}/bin/helm-${helm_version}
         rm -rf ${K8KREATOR_HOME}/tmp/helm-${helm_version}
