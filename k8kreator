@@ -77,13 +77,13 @@ k8kreator-self-update() {
 k8kreator-cluster-create() {
    k8kreator-msg-info "Running function k8kreator-cluster-create (${K8KREATOR_TARGET})"
    source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
-   k8kreator-cluter-create-target
+   k8kreator-cluster-create-target 
 }
 
 k8kreator-cluster-delete() {
    k8kreator-msg-info "Running function k8kreator-cluster-delete (${K8KREATOR_TARGET})"
    source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
-   k8kreator-cluter-delete-target
+   k8kreator-cluster-delete-target
 }
 
 # =============================================================================
