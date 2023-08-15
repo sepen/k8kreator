@@ -2,7 +2,6 @@
 
 k8kreator-tools-install-kind() {
     local kind_version=$1
-    local kind_url="https://kind.sigs.k8s.io/dl/v${kind_version}"
     local kind_url="https://github.com/kubernetes-sigs/kind/releases/download/v${kind_version}"
     local system_platform=($(uname -m -s))
 
