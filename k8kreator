@@ -55,7 +55,7 @@ k8kreator-self-install() {
    fi
    mkdir -p ${K8KREATOR_HOME}/bin ${K8KREATOR_HOME}/tmp
    git clone ${K8KREATOR_REPO} ${K8KREATOR_HOME}/src --quiet
-   ln -s ${K8KREATOR_HOME}/bin/k8kreator ../src/k8kreator
+   ln -sf ${K8KREATOR_HOME}/bin/k8kreator ../src/k8kreator
    k8kreator-msg-info "Installed successfully!"
    k8kreator-msg-info "To finish do you need to add binaries to your PATH as for example:"
    k8kreator-msg-info "  export PATH=\$HOME/.k8kreator/bin:\$PATH"
