@@ -13,8 +13,8 @@ k8kreator-tools-install-kind() {
 
     local system_arch=
     case ${system_uname[1]} in
-        x86_64) system_arch="amd64" ;;
-        arm64) system_arch="arm64" ;;
+        x86_64|amd64) system_arch="amd64" ;;
+        aarch64|arm64) system_arch="arm64" ;;
     esac
 
     kind_url="${kind_url}/kind-${system_os}-${system_arch}"
