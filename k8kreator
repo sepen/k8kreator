@@ -5,15 +5,15 @@
 # =============================================================================
 
 k8kreator-msg-debug() {
-   echo "[k8kreator debug] $@"
+   echo "[k8kreator] DEBUG - $@"
 }
 
 k8kreator-msg-info() {
-   echo "[k8kreator info] $@" 2>&1
+   echo "[k8kreator] INFO - $@" 2>&1
 }
 
 k8kreator-msg-error() {
-   echo "[k8kreator error] $@" 2>&1
+   echo "[k8kreator] ERROR - $@" 2>&1
    exit 1
 }
 
@@ -39,7 +39,7 @@ k8kreator-check-deps() {
    for dep in $@; do
       # Search for the given executable in PATH (avoids a dependency on the `which` command)
       if ! type -P $dep >/dev/null 2>&1; then
-         k8kreator-msg-error "dependency '$dep' not found"
+         k8kreator-msg-error "Dependency '$dep' not found"
       fi
    done
 }
@@ -75,15 +75,18 @@ k8kreator-self-update() {
 # =============================================================================
 
 k8kreator-cluster-create() {
-   k8kreator-msg-info "Running function k8kreator-cluster-create (${K8KREATOR_TARGET})"
+   k8kreator-msg-debug "Running function k8kreator-cluster-create (${K8KREATOR_TARGET})"
    source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
+   k8kreator-tools-install
+   k8kreator-tools-select
    k8kreator-cluster-create-target 
 }
 
 k8kreator-cluster-delete() {
-   k8kreator-msg-info "Running function k8kreator-cluster-delete (${K8KREATOR_TARGET})"
+   k8kreator-msg-debug "Running function k8kreator-cluster-delete (${K8KREATOR_TARGET})"
    source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
    k8kreator-cluster-delete-target
+   k8kreator-tools-uninstall
 }
 
 # =============================================================================
@@ -100,17 +103,17 @@ k8kreator-addons-list() {
 }
 
 k8kreator-addons-install() {
-   k8kreator-msg-info "Running function k8kreator-addons-install $@ (${K8KREATOR_TARGET})"
+   k8kreator-msg-debug "Running function k8kreator-addons-install $@ (${K8KREATOR_TARGET})"
    local addon=$1
 }
 
 k8kreator-addons-update() {
-   k8kreator-msg-info "Running function k8kreator-addons-update $@ (${K8KREATOR_TARGET})"
+   k8kreator-msg-debug "Running function k8kreator-addons-update $@ (${K8KREATOR_TARGET})"
    local addon=$1
 }
 
 k8kreator-addons-uninstall() {
-   k8kreator-msg-info "Running function k8kreator-addons-uninstall $@ (${K8KREATOR_TARGET})"
+   k8kreator-msg-debug "Running function k8kreator-addons-uninstall $@ (${K8KREATOR_TARGET})"
    local addon=$1
 }
 
@@ -119,7 +122,7 @@ k8kreator-addons-uninstall() {
 # =============================================================================
 
 k8kreator-tools-install() {
-   k8kreator-msg-info "Running function k8kreator-tools-install (${K8KREATOR_TARGET})"
+   k8kreator-msg-debug "Running function k8kreator-tools-install (${K8KREATOR_TARGET})"
    source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
    for tool in ${K8KREATOR_TOOLS[@]}; do
       tool_name=${tool%%=*}
@@ -130,7 +133,7 @@ k8kreator-tools-install() {
 }
 
 k8kreator-tools-select() {
-   k8kreator-msg-info "Running function k8kreator-tools-select (${K8KREATOR_TARGET})"
+   k8kreator-msg-debug "Running function k8kreator-tools-select (${K8KREATOR_TARGET})"
    source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
    for tool in ${K8KREATOR_TOOLS[@]}; do
       tool_name=${tool%%=*}
@@ -141,7 +144,7 @@ k8kreator-tools-select() {
 }
 
 k8kreator-tools-uninstall() {
-   k8kreator-msg-info "Running function k8kreator-tools-uninstall (${K8KREATOR_TARGET})"
+   k8kreator-msg-debug "Running function k8kreator-tools-uninstall (${K8KREATOR_TARGET})"
    source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
    for tool in ${K8KREATOR_TOOLS[@]}; do
       tool_name=${tool%%=*}
