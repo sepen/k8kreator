@@ -8,14 +8,14 @@ k8kreator-cluster-create-target() {
     local k3d_version=${K8KREATOR_TOOLS[0]##*=}
     k8kreator-check-deps "k3d"
     k8kreator-msg-info "Creating cluster $name"
-    k3d-${k3d_version} create cluster --name=$name --config=$config
-}
+    k3d-${k3d_version} cluster create $name --config $config
+  }
 
 k8kreator-cluster-delete-target() {
     local name=${K8KREATOR_TARGET}
     k8kreator-check-deps "k3d"
     k8kreator-msg-info "Deleting cluster $name"
-    k3d-${k3d_version} delete clusters $name
+    k3d-${k3d_version} cluster delete $name
 }
 
 # End of file
