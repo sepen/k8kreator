@@ -31,6 +31,11 @@ Where commands and their actions are:
 Additional flags:
   -t <target>  Where target can be also exported via environment variable
                (example: export K8KREATOR_TARGET=default.kind.local)
+
+Available targets are:
+  default.kind.local      (default when not specified)
+  default.minikube.local
+
 __help__
    exit 0
 }
