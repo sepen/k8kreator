@@ -5,15 +5,15 @@
 # =============================================================================
 
 k8kreator-msg-debug() {
-   echo "debug: $@"
+   echo "[k8kreator debug] $@"
 }
 
 k8kreator-msg-info() {
-   echo "info: $@" 2>&1
+   echo "[k8kreator info] $@" 2>&1
 }
 
 k8kreator-msg-error() {
-   echo "error: $@" 2>&1
+   echo "[k8kreator error] $@" 2>&1
    exit 1
 }
 
