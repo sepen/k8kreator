@@ -29,7 +29,8 @@ At this moment **k8kreator** supports the following Kubernetes engines:
 [k3d]: https://k3d.io/
 [minikube]: https://minikube.sigs.k8s.io/
 
-Each cluster in **k8kreator** can be identified as a _target_ which is defined as follows: `<name>.<engine>.<environment>`. Each _target_ has its own configuration for the Kubernetes engine and a set of _addons_ to populate the cluster. These _addons_ may vary from one _target_ to another and may have different configuration depending on the Kubernetes engine.
+Each cluster in **k8kreator** can be identified as a _target_: `<name>.<engine>.<environment>`.
+Each _target_ has its own configuration for the Kubernetes engine and a set of _addons_ to populate the cluster. These _addons_ may vary from one _target_ to another and may have different configuration depending on the Kubernetes engine.
 
 **k8kreator** provides the following _default_ targets:
 * `default.kind.local`
