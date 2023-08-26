@@ -93,7 +93,7 @@ k8kreator-cluster-delete() {
 k8kreator-addons-list() {
    k8kreator-check-deps "find"
    printf "Available addons:\n"
-   find ${K8KREATOR_HOME}/addons -depth 1 -type d -exec basename {} \; \
+   find ${K8KREATOR_HOME}/addons -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
    | while read addon; do
       printf "  %s\n" $addon
    done
