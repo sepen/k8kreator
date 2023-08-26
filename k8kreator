@@ -21,11 +21,11 @@ k8kreator-msg-help() {
    cat << __help__
 Usage: k8kreator [command] [action] <flags>
 
-Where commands and actions are:
-  k8kreator self [install|update]
-  k8kreator cluster [create|delete]
-  k8kreator addons [install|update|uninstall]
-  k8kreator tools [install|select|uninstall]
+Where commands and their actions are:
+  k8kreator self    [ install | update ]
+  k8kreator cluster [ list | create | delete ]
+  k8kreator addons  [ list | install | update | uninstall ]
+  k8kreator tools   [ list | install | select | uninstall ]
   k8kreator help
 
 Additional flags:
