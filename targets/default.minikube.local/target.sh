@@ -8,8 +8,6 @@ k8kreator-cluster-create-target() {
     local minikube_version=${K8KREATOR_TOOLS[0]##*=}
     k8kreator-check-deps "minikube-${minikube_version}"
     k8kreator-msg-info "Creating cluster $name"
-    k8kreator-tools-install
-    k8kreator-tools-select
     minikube-${minikube_version} start \
       --kubernetes-version="v1.26.8" \
       --dns-domain="${name}" \
@@ -21,7 +19,6 @@ k8kreator-cluster-delete-target() {
     k8kreator-check-deps "minikube-${minikube_version}"
     k8kreator-msg-info "Deleting cluster $name"
     minikube-${minikube_version} delete
-    k8kreator-tools-uninstall
 }
 
 # End of file
