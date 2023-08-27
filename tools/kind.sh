@@ -34,4 +34,10 @@ k8kreator-tools-select-kind() {
     ln -sf kind-${kind_version} ${K8KREATOR_HOME}/bin/kind
 }
 
+k8kreator-tools-uninstall-kind() {
+  local kind_version=$1
+  k8kreator-check-deps "rm"
+  rm -f ${K8KREATOR_HOME}/bin/kind-${kind_version}
+}
+
 # End of file

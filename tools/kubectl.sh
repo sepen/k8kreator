@@ -33,4 +33,10 @@ k8kreator-tools-select-kubectl() {
     ln -sf kubectl-${kubectl_version} ${K8KREATOR_HOME}/bin/kubectl
 }
 
+k8kreator-tools-uninstall-kubectl() {
+  local kubectl_version=$1
+  k8kreator-check-deps "rm"
+  rm -f ${K8KREATOR_HOME}/bin/kubectl-${kubectl_version}
+}
+
 # End of file

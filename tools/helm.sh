@@ -38,4 +38,10 @@ k8kreator-tools-select-helm() {
     ln -sf helm-${helm_version} ${K8KREATOR_HOME}/bin/helm
 }
 
+k8kreator-tools-uninstall-helm() {
+  local helm_version=$1
+  k8kreator-check-deps "rm"
+  rm -f ${K8KREATOR_HOME}/bin/helm-${helm_version}
+}
+
 # End of file

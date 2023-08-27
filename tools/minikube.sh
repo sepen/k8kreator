@@ -34,4 +34,10 @@ k8kreator-tools-select-minikube() {
     ln -sf minikube-${minikube_version} ${K8KREATOR_HOME}/bin/minikube
 }
 
+k8kreator-tools-uninstall-minikube() {
+  local minikube_version=$1
+  k8kreator-check-deps "rm"
+  rm -f ${K8KREATOR_HOME}/bin/minikube-${minikube_version}
+}
+
 # End of file

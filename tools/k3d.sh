@@ -34,4 +34,10 @@ k8kreator-tools-select-k3d() {
     ln -sf k3d-${k3d_version} ${K8KREATOR_HOME}/bin/k3d
 }
 
+k8kreator-tools-uninstall-k3d() {
+  local k3d_version=$1
+  k8kreator-check-deps "rm"
+  rm -f ${K8KREATOR_HOME}/bin/k3d-${k3d_version}
+}
+
 # End of file
