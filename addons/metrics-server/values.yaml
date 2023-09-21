@@ -1,0 +1,19 @@
+# Name:    metrics-server
+# Website: https://github.com/kubernetes-sigs/metrics-server
+# Chart:   https://github.com/kubernetes-sigs/metrics-server/tree/master/charts/metrics-server
+# Values:  https://github.com/kubernetes-sigs/metrics-server/blob/master/charts/metrics-server/values.yaml
+
+args:
+  - --kubelet-insecure-tls=true
+
+tolerations:
+  - effect: NoSchedule
+    operator: Exists
+
+# See https://github.com/kubernetes-sigs/metrics-server#scaling
+resources:
+  requests:
+    cpu: 0.1
+    memory: 50Mi
+
+# End of file

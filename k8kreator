@@ -32,8 +32,8 @@ Additional flags:
   -t <target>  Where target can be also exported via environment variable
                (example: export K8KREATOR_TARGET=default.kind.local)
 
-Available targets are:
-  default.kind.local      (default when not specified)
+Available cluster targets:
+  default.kind.local        (default when target is not specified)
   default.k3d.local
   default.minikube.local
 
@@ -50,18 +50,29 @@ k8kreator-check-deps() {
   done
 }
 
+k8kreator-get-tool-command() {
+  local tool_name=$1
+  # it returns tool command and version (example: kubectl-1.27.4, helm-3.12.3, etc.)
+  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
+  for tool in ${K8KREATOR_TOOLS[@]}; do
+    case ${tool} in
+      ${tool_name}=*) echo "${tool_name}-${tool##*=}" ;;
+    esac
+  done
+}
+
 # =============================================================================
 # k8kreator self
 # =============================================================================
 
 k8kreator-self-install() {
   k8kreator-check-deps "mkdir" "git" "ln"
-  if [ -d ${K8KREATOR_HOME}/src ]; then
+  if [ -d ${K8KREATOR_SRCDIR} ]; then
     k8kreator-msg-error "k8kreator previously installed"
   fi
-  mkdir -p ${K8KREATOR_HOME}/bin ${K8KREATOR_HOME}/tmp
-  git clone ${K8KREATOR_REPO} ${K8KREATOR_HOME}/src --quiet
-  ln -svf ../src/k8kreator ${K8KREATOR_HOME}/bin/k8kreator
+  mkdir -p ${K8KREATOR_BINDIR} ${K8KREATOR_TMPDIR}
+  git clone ${K8KREATOR_GITHUB_REPO} ${K8KREATOR_SRCDIR} --quiet
+  ln -svf ../src/k8kreator ${K8KREATOR_BINDIR}/k8kreator
   k8kreator-msg-info "Installed successfully!"
   k8kreator-msg-info "To finish do you need to add binaries to your PATH as for example:"
   k8kreator-msg-info "  export PATH=\$HOME/.k8kreator/bin:\$PATH"
@@ -69,10 +80,10 @@ k8kreator-self-install() {
 
 k8kreator-self-update() {
   k8kreator-check-deps "git"
-  if [ ! -d ${K8KREATOR_HOME}/src ]; then
+  if [ ! -d ${K8KREATOR_SRCDIR} ]; then
     k8kreator-msg-error "can't update k8kreator"
   fi
-  cd ${K8KREATOR_HOME}/src && git pull --rebase origin main --quiet
+  cd ${K8KREATOR_SRCDIR} && git pull --rebase origin main --quiet
   k8kreator-msg-info "Updated successfully!"
 }
 
@@ -80,9 +91,19 @@ k8kreator-self-update() {
 # k8kreator cluster
 # =============================================================================
 
+k8kreator-cluster-list() {
+  k8kreator-msg-debug "Running function k8kreator-cluster-list (${K8KREATOR_TARGET})"
+  k8kreator-check-deps "find"
+  printf "Available cluster targets:\n"
+  find ${K8KREATOR_HOME}/targets -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
+  | while read target; do
+    printf "  %s\n" ${target}
+  done
+}
+
 k8kreator-cluster-create() {
   k8kreator-msg-debug "Running function k8kreator-cluster-create (${K8KREATOR_TARGET})"
-  source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
+  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/target.sh
   k8kreator-tools-install
   k8kreator-tools-select
   k8kreator-cluster-create-target 
@@ -90,7 +111,7 @@ k8kreator-cluster-create() {
 
 k8kreator-cluster-delete() {
   k8kreator-msg-debug "Running function k8kreator-cluster-delete (${K8KREATOR_TARGET})"
-  source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
+  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/target.sh
   k8kreator-cluster-delete-target
   k8kreator-tools-uninstall
 }
@@ -100,62 +121,90 @@ k8kreator-cluster-delete() {
 # =============================================================================
 
 k8kreator-addons-list() {
+  k8kreator-msg-debug "Running function k8kreator-addons-list (${K8KREATOR_TARGET})"
   k8kreator-check-deps "find"
   printf "Available addons:\n"
   find ${K8KREATOR_HOME}/addons -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
   | while read addon; do
-    printf "  %s\n" $addon
+    printf "  %s\n" ${addon}
   done
 }
 
 k8kreator-addons-install() {
   k8kreator-msg-debug "Running function k8kreator-addons-install $@ (${K8KREATOR_TARGET})"
-  local addon=$1
+  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
+  for addon in ${K8KREATOR_ADDONS[@]}; do
+    addon_name=${addon%%=*}
+    addon_version=${addon##*=}
+    source ${K8KREATOR_HOME}/addons/${addon_name}.sh
+    k8kreator-addons-install-${addon_name} ${addon_version}
+  done
 }
 
 k8kreator-addons-update() {
   k8kreator-msg-debug "Running function k8kreator-addons-update $@ (${K8KREATOR_TARGET})"
-  local addon=$1
+  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
+  for addon in ${K8KREATOR_ADDONS[@]}; do
+    addon_name=${addon%%=*}
+    addon_version=${addon##*=}
+    source ${K8KREATOR_HOME}/addons/${addon_name}.sh
+    k8kreator-addons-update-${addon_name} ${addon_version}
+  done
 }
 
 k8kreator-addons-uninstall() {
   k8kreator-msg-debug "Running function k8kreator-addons-uninstall $@ (${K8KREATOR_TARGET})"
-  local addon=$1
+  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
+  for addon in ${K8KREATOR_ADDONS[@]}; do
+    addon_name=${addon%%=*}
+    addon_version=${addon##*=}
+    source ${K8KREATOR_HOME}/addons/${addon_name}.sh
+    k8kreator-addons-uninstall-${addon_name} ${addon_version}
+  done
 }
 
 # =============================================================================
 # k8kreator tools
 # =============================================================================
 
+k8kreator-tools-list() {
+  k8kreator-check-deps "find"
+  printf "Available tools:\n"
+  find ${K8KREATOR_HOME}/tools -type f -name '*.sh' -exec basename {} .sh \; \
+  | while read tool; do
+    printf "  %s\n" ${tool}
+  done
+}
+
 k8kreator-tools-install() {
   k8kreator-msg-debug "Running function k8kreator-tools-install (${K8KREATOR_TARGET})"
-  source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
+  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
   for tool in ${K8KREATOR_TOOLS[@]}; do
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
-    source ${K8KREATOR_HOME}/src/tools/${tool_name}.sh
+    source ${K8KREATOR_HOME}/tools/${tool_name}.sh
     k8kreator-tools-install-${tool_name} ${tool_version}
   done
 }
 
 k8kreator-tools-select() {
   k8kreator-msg-debug "Running function k8kreator-tools-select (${K8KREATOR_TARGET})"
-  source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
+  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
   for tool in ${K8KREATOR_TOOLS[@]}; do
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
-    source ${K8KREATOR_HOME}/src/tools/${tool_name}.sh
+    source ${K8KREATOR_HOME}/tools/${tool_name}.sh
     k8kreator-tools-select-${tool_name} ${tool_version}
   done
 }
 
 k8kreator-tools-uninstall() {
   k8kreator-msg-debug "Running function k8kreator-tools-uninstall (${K8KREATOR_TARGET})"
-  source ${K8KREATOR_HOME}/src/targets/${K8KREATOR_TARGET}/target.sh
+  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
   for tool in ${K8KREATOR_TOOLS[@]}; do
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
-    source ${K8KREATOR_HOME}/src/tools/${tool_name}.sh
+    source ${K8KREATOR_HOME}/tools/${tool_name}.sh
     k8kreator-tools-uninstall-${tool_name} ${tool_version}
   done
 }
@@ -172,7 +221,10 @@ fi
 # Readonly variables
 readonly K8KREATOR_DEBUG=${K8KREATOR_DEBUG:-0}
 readonly K8KREATOR_HOME="${K8KREATOR_HOME:-${HOME}/.k8kreator}"
-readonly K8KREATOR_REPO="https://github.com/sepen/k8kreator"
+readonly K8KREATOR_BINDIR="${K8KREATOR_BINDIR:-${K8KREATOR_HOME}/bin}"
+readonly K8KREATOR_SRCDIR="${K8KREATOR_SRCDIR:-${K8KREATOR_HOME}/src}"
+readonly K8KREATOR_TMPDIR="${K8KREATOR_TMPDIR:-${K8KREATOR_HOME}/tmp}"
+readonly K8KREATOR_GITHUB_REPO="https://github.com/sepen/k8kreator"
 
 # Obtain target from environment or input command args, otherwise use defaults.
 export K8KREATOR_TARGET=${K8KREATOR_TARGET:-default.kind.local}
