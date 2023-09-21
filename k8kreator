@@ -5,11 +5,13 @@
 # =============================================================================
 
 k8kreator-msg-debug() {
-  echo "[k8kreator] DEBUG - $@"
+  if [ ${K8KREATOR_DEBUG} -eq 1 ]; then
+    echo "[k8kreator] DEBUG - $@"
+  fi
 }
 
 k8kreator-msg-info() {
-  echo "[k8kreator] INFO - $@" 2>&1
+  echo "[k8kreator] INFO - $@"
 }
 
 k8kreator-msg-error() {
@@ -250,18 +252,16 @@ readonly K8KREATOR_ENGINE=${K8KREATOR_TARGET%%.*}
 readonly K8KREATOR_COMMAND=${userinput[0]}
 readonly K8KREATOR_ACTION=${userinput[1]}
 readonly K8KREATOR_FUNCTION="k8kreator-${K8KREATOR_COMMAND}-${K8KREATOR_ACTION}"
-#readonly K8KREATOR_FUNCTION_OPTS=${userinput[@] :2}
+readonly K8KREATOR_FUNCTION_OPTS=${userinput[@] :2}
 
 # Cleanup variable
 unset userinput
 
 # Show debug
-if [ ${K8KREATOR_DEBUG} -eq 1 ]; then
-  k8kreator-msg-debug "K8KREATOR_TARGET: ${K8KREATOR_TARGET}"
-  k8kreator-msg-debug "K8KREATOR_ENGINE: ${K8KREATOR_ENGINE}"
-  k8kreator-msg-debug "K8KREATOR_FUNCTION: ${K8KREATOR_FUNCTION}"
-  #k8kreator-msg-debug "K8KREATOR_FUNCTION_OPTS: ${K8KREATOR_FUNCTION_OPTS}"
-fi
+k8kreator-msg-debug "K8KREATOR_TARGET: ${K8KREATOR_TARGET}"
+k8kreator-msg-debug "K8KREATOR_ENGINE: ${K8KREATOR_ENGINE}"
+k8kreator-msg-debug "K8KREATOR_FUNCTION: ${K8KREATOR_FUNCTION}"
+k8kreator-msg-debug "K8KREATOR_FUNCTION_OPTS: ${K8KREATOR_FUNCTION_OPTS}"
 
 # Check if funcion exists
 if ! declare -f ${K8KREATOR_FUNCTION} >/dev/null 2>&1; then
@@ -269,6 +269,6 @@ if ! declare -f ${K8KREATOR_FUNCTION} >/dev/null 2>&1; then
 fi
 
 # Execute function
-${K8KREATOR_FUNCTION} #${K8KREATOR_FUNCTION_OPTS}
+${K8KREATOR_FUNCTION} ${K8KREATOR_FUNCTION_OPTS}
 
 # End of file
