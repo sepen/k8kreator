@@ -9,7 +9,7 @@ k8kreator-addons-install-metrics-server() {
     --repo https://kubernetes-sigs.github.io/metrics-server \
     --version ${addon_version} \
     --create-namespace --namespace kube-system \
-    -f ${K8KREATOR_HOME}/src/addons/metrics-server/values.yaml
+    -f ${K8KREATOR_SRCDIR}/addons/metrics-server/values.yaml
 }
 
 k8kreator-addons-update-metrics-server() {
@@ -18,7 +18,7 @@ k8kreator-addons-update-metrics-server() {
     --repo https://kubernetes-sigs.github.io/metrics-server \
     --version ${addon_version} \
     --create-namespace --namespace kube-system \
-    -f ${K8KREATOR_HOME}/src/addons/metrics-server/values.yaml
+    -f ${K8KREATOR_SRCDIR}/addons/metrics-server/values.yaml
 }
 
 k8kreator-addons-uninstall-metrics-server() {

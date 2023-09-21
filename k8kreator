@@ -53,7 +53,7 @@ k8kreator-check-deps() {
 k8kreator-get-tool-command() {
   local tool_name=$1
   # it returns tool command and version (example: kubectl-1.27.4, helm-3.12.3, etc.)
-  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
+  source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
   for tool in ${K8KREATOR_TOOLS[@]}; do
     case ${tool} in
       ${tool_name}=*) echo "${tool_name}-${tool##*=}" ;;
@@ -95,7 +95,7 @@ k8kreator-cluster-list() {
   k8kreator-msg-debug "Running function k8kreator-cluster-list (${K8KREATOR_TARGET})"
   k8kreator-check-deps "find"
   printf "Available cluster targets:\n"
-  find ${K8KREATOR_HOME}/targets -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
+  find ${K8KREATOR_SRCDIR}/targets -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
   | while read target; do
     printf "  %s\n" ${target}
   done
@@ -103,7 +103,7 @@ k8kreator-cluster-list() {
 
 k8kreator-cluster-create() {
   k8kreator-msg-debug "Running function k8kreator-cluster-create (${K8KREATOR_TARGET})"
-  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/target.sh
+  source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/target.sh
   k8kreator-tools-install
   k8kreator-tools-select
   k8kreator-cluster-create-target 
@@ -111,7 +111,7 @@ k8kreator-cluster-create() {
 
 k8kreator-cluster-delete() {
   k8kreator-msg-debug "Running function k8kreator-cluster-delete (${K8KREATOR_TARGET})"
-  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/target.sh
+  source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/target.sh
   k8kreator-cluster-delete-target
   k8kreator-tools-uninstall
 }
@@ -124,7 +124,7 @@ k8kreator-addons-list() {
   k8kreator-msg-debug "Running function k8kreator-addons-list (${K8KREATOR_TARGET})"
   k8kreator-check-deps "find"
   printf "Available addons:\n"
-  find ${K8KREATOR_HOME}/addons -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
+  find ${K8KREATOR_SRCDIR}/addons -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
   | while read addon; do
     printf "  %s\n" ${addon}
   done
@@ -132,33 +132,33 @@ k8kreator-addons-list() {
 
 k8kreator-addons-install() {
   k8kreator-msg-debug "Running function k8kreator-addons-install $@ (${K8KREATOR_TARGET})"
-  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
+  source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
   for addon in ${K8KREATOR_ADDONS[@]}; do
     addon_name=${addon%%=*}
     addon_version=${addon##*=}
-    source ${K8KREATOR_HOME}/addons/${addon_name}.sh
+    source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
     k8kreator-addons-install-${addon_name} ${addon_version}
   done
 }
 
 k8kreator-addons-update() {
   k8kreator-msg-debug "Running function k8kreator-addons-update $@ (${K8KREATOR_TARGET})"
-  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
+  source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
   for addon in ${K8KREATOR_ADDONS[@]}; do
     addon_name=${addon%%=*}
     addon_version=${addon##*=}
-    source ${K8KREATOR_HOME}/addons/${addon_name}.sh
+    source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
     k8kreator-addons-update-${addon_name} ${addon_version}
   done
 }
 
 k8kreator-addons-uninstall() {
   k8kreator-msg-debug "Running function k8kreator-addons-uninstall $@ (${K8KREATOR_TARGET})"
-  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
+  source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
   for addon in ${K8KREATOR_ADDONS[@]}; do
     addon_name=${addon%%=*}
     addon_version=${addon##*=}
-    source ${K8KREATOR_HOME}/addons/${addon_name}.sh
+    source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
     k8kreator-addons-uninstall-${addon_name} ${addon_version}
   done
 }
@@ -170,7 +170,7 @@ k8kreator-addons-uninstall() {
 k8kreator-tools-list() {
   k8kreator-check-deps "find"
   printf "Available tools:\n"
-  find ${K8KREATOR_HOME}/tools -type f -name '*.sh' -exec basename {} .sh \; \
+  find ${K8KREATOR_SRCDIR}/tools -type f -name '*.sh' -exec basename {} .sh \; \
   | while read tool; do
     printf "  %s\n" ${tool}
   done
@@ -178,33 +178,33 @@ k8kreator-tools-list() {
 
 k8kreator-tools-install() {
   k8kreator-msg-debug "Running function k8kreator-tools-install (${K8KREATOR_TARGET})"
-  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
+  source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
   for tool in ${K8KREATOR_TOOLS[@]}; do
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
-    source ${K8KREATOR_HOME}/tools/${tool_name}.sh
+    source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
     k8kreator-tools-install-${tool_name} ${tool_version}
   done
 }
 
 k8kreator-tools-select() {
   k8kreator-msg-debug "Running function k8kreator-tools-select (${K8KREATOR_TARGET})"
-  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
+  source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
   for tool in ${K8KREATOR_TOOLS[@]}; do
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
-    source ${K8KREATOR_HOME}/tools/${tool_name}.sh
+    source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
     k8kreator-tools-select-${tool_name} ${tool_version}
   done
 }
 
 k8kreator-tools-uninstall() {
   k8kreator-msg-debug "Running function k8kreator-tools-uninstall (${K8KREATOR_TARGET})"
-  source ${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/env.sh
+  source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
   for tool in ${K8KREATOR_TOOLS[@]}; do
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
-    source ${K8KREATOR_HOME}/tools/${tool_name}.sh
+    source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
     k8kreator-tools-uninstall-${tool_name} ${tool_version}
   done
 }

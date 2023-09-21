@@ -19,25 +19,25 @@ k8kreator-tools-install-kind() {
 
   kind_url="${kind_url}/kind-${system_os}-${system_arch}"
 
-  if [ ! -f ${K8KREATOR_HOME}/bin/kind-${kind_version} ]; then
+  if [ ! -f ${K8KREATOR_BINDIR}/kind-${kind_version} ]; then
     k8kreator-check-deps "curl" "chmod"
     k8kreator-msg-info "Installing kind ${kind_version}"
-    curl -s -L -o ${K8KREATOR_HOME}/bin/kind-${kind_version} ${kind_url}
-    chmod +x ${K8KREATOR_HOME}/bin/kind-${kind_version}
+    curl -s -L -o ${K8KREATOR_BINDIR}/kind-${kind_version} ${kind_url}
+    chmod +x ${K8KREATOR_BINDIR}/kind-${kind_version}
   fi
 }
 
 k8kreator-tools-select-kind() {
   local kind_version=$1
   k8kreator-check-deps "rm" "ln"
-  rm -f ${K8KREATOR_HOME}/bin/kind
-  ln -sf kind-${kind_version} ${K8KREATOR_HOME}/bin/kind
+  rm -f ${K8KREATOR_BINDIR}/kind
+  ln -sf kind-${kind_version} ${K8KREATOR_BINDIR}/kind
 }
 
 k8kreator-tools-uninstall-kind() {
   local kind_version=$1
   k8kreator-check-deps "rm"
-  rm -f ${K8KREATOR_HOME}/bin/kind-${kind_version}
+  rm -f ${K8KREATOR_BINDIR}/kind-${kind_version}
 }
 
 # End of file

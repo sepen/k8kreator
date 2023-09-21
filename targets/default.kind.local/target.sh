@@ -7,7 +7,7 @@ k8kreator-cluster-create-target() {
   k8kreator-msg-info "Creating cluster ${K8KREATOR_TARGET}"
   ${KIND_COMMAND} create cluster \
     --name=${K8KREATOR_TARGET} \
-    --config=${K8KREATOR_HOME}/targets/${K8KREATOR_TARGET}/cluster.yaml
+    --config=${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/cluster.yaml
 }
 
 k8kreator-cluster-delete-target() {
