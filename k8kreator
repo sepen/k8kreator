@@ -252,7 +252,6 @@ readonly K8KREATOR_ENGINE=${K8KREATOR_TARGET%%.*}
 readonly K8KREATOR_COMMAND=${userinput[0]}
 readonly K8KREATOR_ACTION=${userinput[1]}
 readonly K8KREATOR_FUNCTION="k8kreator-${K8KREATOR_COMMAND}-${K8KREATOR_ACTION}"
-readonly K8KREATOR_FUNCTION_OPTS=${userinput[@] :2}
 
 # Cleanup variable
 unset userinput
@@ -261,7 +260,6 @@ unset userinput
 k8kreator-msg-debug "K8KREATOR_TARGET: ${K8KREATOR_TARGET}"
 k8kreator-msg-debug "K8KREATOR_ENGINE: ${K8KREATOR_ENGINE}"
 k8kreator-msg-debug "K8KREATOR_FUNCTION: ${K8KREATOR_FUNCTION}"
-k8kreator-msg-debug "K8KREATOR_FUNCTION_OPTS: ${K8KREATOR_FUNCTION_OPTS}"
 
 # Check if funcion exists
 if ! declare -f ${K8KREATOR_FUNCTION} >/dev/null 2>&1; then
@@ -269,6 +267,6 @@ if ! declare -f ${K8KREATOR_FUNCTION} >/dev/null 2>&1; then
 fi
 
 # Execute function
-${K8KREATOR_FUNCTION} ${K8KREATOR_FUNCTION_OPTS}
+${K8KREATOR_FUNCTION}
 
 # End of file
