@@ -26,7 +26,7 @@ k8kreator-addons-update-metrics-server() {
 k8kreator-addons-uninstall-metrics-server() {
   k8kreator-msg-debug "Running function k8kreator-addons-uninstall-metrics-server $@ (${K8KREATOR_TARGET})"
   local addon_version=$1
-  ${HELM_COMMAND} uninstall metrics-server metrics-server \
+  ${HELM_COMMAND} uninstall metrics-server \
     --namespace kube-system
 }
 
