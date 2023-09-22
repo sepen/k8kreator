@@ -1,0 +1,28 @@
+# MetalLB requires a pool of IP addresses in order to be able to take ownership of the ingress-nginx Service.
+# This pool can be defined through IPAddressPool objects in the same namespace as the MetalLB controller.
+# This pool of IPs must be dedicated to MetalLB's use, you can't reuse the Kubernetes node IPs or IPs handed out by a DHCP server.
+#
+# After creating the following objects, MetalLB takes ownership of one of the IP addresses in the pool and updates
+# the *loadBalancer* IP field of the `ingress-nginx` Service accordingly.
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  # To obtain the node subnet
+  # $ docker network inspect -f '{{.IPAM.Config}}' kind`
+  addresses:
+  - 172.25.0.10-172.25.0.20
+  autoAssign: true
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - default
+
+# End of file

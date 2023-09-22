@@ -1,0 +1,49 @@
+# https://github.com/metallb/metallb
+# https://github.com/metallb/metallb/tree/main/charts/metallb
+# https://github.com/metallb/metallb/blob/main/charts/metallb/values.yaml
+
+nameOverride: "metallb"
+fullnameOverride: ""
+loadBalancerClass: ""
+
+# To configure MetalLB, you must specify ONE of the following two
+# options.
+
+rbac:
+  # create specifies whether to install and use RBAC rules.
+  create: true
+
+psp:
+  # create specifies whether to install and use Pod Security Policies.
+  create: false
+
+prometheus:
+  scrapeAnnotations: false
+
+# controller contains configuration specific to the MetalLB cluster
+# controller.
+controller:
+  enabled: true
+  strategy:
+    type: RollingUpdate
+  serviceAccount:
+    create: true
+
+# speaker contains configuration specific to the MetalLB speaker
+# daemonset.
+speaker:
+  enabled: true
+  updateStrategy:
+    type: RollingUpdate
+  serviceAccount:
+    create: true
+
+  # frr contains configuration specific to the MetalLB FRR container,
+  # for speaker running alongside FRR.
+  frr:
+    enabled: false
+
+crds:
+  enabled: true
+
+# End of file

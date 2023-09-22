@@ -1,0 +1,9 @@
+# https://github.com/kubernetes/ingress-nginx
+# https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx
+
+controller:
+
+  config:
+    ssl-redirect: "false"
+    hsts: "false"
+  server-tokens: "false"
