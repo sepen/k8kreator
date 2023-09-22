@@ -4,12 +4,7 @@ HELM_COMMAND=$(k8kreator-get-tool-command "helm")
 
 k8kreator-addons-install-metrics-server() {
   k8kreator-msg-debug "Running function k8kreator-addons-install-metrics-server $@ (${K8KREATOR_TARGET})"
-  local addon_version=$1
-  ${HELM_COMMAND} install metrics-server metrics-server \
-    --repo https://kubernetes-sigs.github.io/metrics-server \
-    --version ${addon_version} \
-    --create-namespace --namespace kube-system \
-    -f ${K8KREATOR_SRCDIR}/addons/metrics-server/values.yaml
+  k8kreator-addons-update-metrics-server $@
 }
 
 k8kreator-addons-update-metrics-server() {
@@ -19,7 +14,7 @@ k8kreator-addons-update-metrics-server() {
     --repo https://kubernetes-sigs.github.io/metrics-server \
     --version ${addon_version} \
     --create-namespace --namespace kube-system \
-    --atomic --cleanup-on-fail \
+    --install --atomic --cleanup-on-fail \
     -f ${K8KREATOR_SRCDIR}/addons/metrics-server/values.yaml
 }
 
