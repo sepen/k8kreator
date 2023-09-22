@@ -15,7 +15,7 @@ post-install() {
   # MetalLB requires a pool of IP addresses in order to be able to take ownership of the ingress-nginx Service.
   # This pool can be defined through IPAddressPool objects in the same namespace as the MetalLB controller.
   # This pool of IPs must be dedicated to MetalLB's use, you can't reuse the Kubernetes node IPs or IPs handed out by a DHCP server.
-  ${KUBECTL_COMMAND} apply -f ${K8KREATOR_SRCDIR}/addons/metallb/$(K8KREATOR_TARGET)/ip-address-pool.yaml
+  ${KUBECTL_COMMAND} apply -f ${K8KREATOR_SRCDIR}/addons/metallb/${K8KREATOR_TARGET}/ip-address-pool.yaml
   ${KUBECTL_COMMAND} delete pods,services --all -n metallb-system
   sleep 5
 }
