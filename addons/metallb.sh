@@ -34,7 +34,7 @@ k8kreator-addons-update-metallb() {
   ${HELM_COMMAND} upgrade metallb metallb \
     --repo https://metallb.github.io/metallb \
     --version ${addon_version} \
-    --create-namespace --namespace kube-system \
+    --create-namespace --namespace metallb-system \
     --install --atomic --cleanup-on-fail \
     -f ${K8KREATOR_SRCDIR}/addons/metallb/values.yaml
   post-install
@@ -45,7 +45,7 @@ k8kreator-addons-uninstall-metallb() {
   local addon_version=$1
   k8kreator-msg-info "Uninstalling addons MetalLB ${addon_version}"
   ${HELM_COMMAND} uninstall metallb \
-    --namespace kube-system
+    --namespace metallb-system
 }
 
 # End of file
