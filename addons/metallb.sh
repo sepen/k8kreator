@@ -22,14 +22,8 @@ post-install() {
 
 k8kreator-addons-install-metallb() {
   k8kreator-msg-debug "Running function k8kreator-addons-install-metallb $@ (${K8KREATOR_TARGET})"
-  local addon_version=$1
-  pre-install
-  ${HELM_COMMAND} install metallb metallb \
-    --repo https://metallb.github.io/metallb \
-    --version ${addon_version} \
-    --create-namespace --namespace kube-system \
-    -f ${K8KREATOR_SRCDIR}/addons/metallb/values.yaml
-  post-install
+  # Helm install and upgrade are bassically the same. It just require some helm flags like -i
+  k8kreator-addons-update-metallb $@
 }
 
 k8kreator-addons-update-metallb() {
@@ -40,7 +34,7 @@ k8kreator-addons-update-metallb() {
     --repo https://metallb.github.io/metallb \
     --version ${addon_version} \
     --create-namespace --namespace kube-system \
-    --atomic --cleanup-on-fail \
+    --install --atomic --cleanup-on-fail \
     -f ${K8KREATOR_SRCDIR}/addons/metallb/values.yaml
   post-install
 }
