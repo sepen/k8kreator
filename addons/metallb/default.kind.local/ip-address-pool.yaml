@@ -13,7 +13,7 @@ spec:
   # To obtain the node subnet
   # $ docker network inspect -f '{{.IPAM.Config}}' kind`
   addresses:
-  - 172.25.0.10-172.25.0.20
+  - 172.19.0.10-172.19.0.20
   autoAssign: true
 ---
 apiVersion: metallb.io/v1beta1
