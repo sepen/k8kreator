@@ -25,7 +25,7 @@ k8kreator-addons-install-metallb() {
   local addon_version=$1
   pre-install
   ${HELM_COMMAND} install metallb metallb \
-    --repo https://kubernetes-sigs.github.io/metallb \
+    --repo https://metallb.github.io/metallb \
     --version ${addon_version} \
     --create-namespace --namespace kube-system \
     -f ${K8KREATOR_SRCDIR}/addons/metallb/values.yaml
@@ -37,7 +37,7 @@ k8kreator-addons-update-metallb() {
   local addon_version=$1
   pre-install
   ${HELM_COMMAND} upgrade metallb metallb \
-    --repo https://kubernetes-sigs.github.io/metallb \
+    --repo https://metallb.github.io/metallb \
     --version ${addon_version} \
     --create-namespace --namespace kube-system \
     --atomic --cleanup-on-fail \
