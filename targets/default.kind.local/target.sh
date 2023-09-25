@@ -4,7 +4,6 @@ KIND_COMMAND=$(k8kreator-get-tool-command "kind")
 
 k8kreator-cluster-create-target() {
   k8kreator-check-deps ${KIND_COMMAND}
-  k8kreator-msg-info "Creating cluster ${K8KREATOR_TARGET}"
   ${KIND_COMMAND} create cluster \
     --name=${K8KREATOR_TARGET} \
     --config=${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/cluster.yaml
@@ -12,7 +11,6 @@ k8kreator-cluster-create-target() {
 
 k8kreator-cluster-delete-target() {
   k8kreator-check-deps ${KIND_COMMAND}
-  k8kreator-msg-info "Deleting cluster ${K8KREATOR_TARGET}"
   ${KIND_COMMAND} delete clusters ${K8KREATOR_TARGET}
 }
 

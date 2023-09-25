@@ -30,7 +30,6 @@ k8kreator-addons-update-metallb() {
   k8kreator-msg-debug "Running function k8kreator-addons-update-metallb $@ (${K8KREATOR_TARGET})"
   local addon_version=$1
   pre-install
-  k8kreator-msg-info "Installing/Upgrading addons MetalLB ${addon_version}"
   ${HELM_COMMAND} upgrade metallb metallb \
     --repo https://metallb.github.io/metallb \
     --version ${addon_version} \
@@ -43,7 +42,6 @@ k8kreator-addons-update-metallb() {
 k8kreator-addons-uninstall-metallb() {
   k8kreator-msg-debug "Running function k8kreator-addons-uninstall-metallb $@ (${K8KREATOR_TARGET})"
   local addon_version=$1
-  k8kreator-msg-info "Uninstalling addons MetalLB ${addon_version}"
   ${HELM_COMMAND} uninstall metallb \
     --namespace metallb-system
 }
