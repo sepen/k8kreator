@@ -21,7 +21,6 @@ k8kreator-tools-install-minikube() {
 
   if [ ! -f ${K8KREATOR_BINDIR}/minikube-${minikube_version} ]; then
     k8kreator-check-deps "curl" "chmod"
-    k8kreator-msg-info "Installing minikube ${minikube_version}"
     curl -s -L -o ${K8KREATOR_BINDIR}/minikube-${minikube_version} ${minikube_url}
     chmod +x ${K8KREATOR_BINDIR}/minikube-${minikube_version}
   fi

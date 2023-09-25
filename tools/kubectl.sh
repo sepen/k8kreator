@@ -20,7 +20,6 @@ k8kreator-tools-install-kubectl() {
   kubectl_url="${kubectl_url}/${system_os}/${system_arch}/kubectl"
 
   if [ ! -f ${K8KREATOR_BINDIR}/kubectl-${kubectl_version} ]; then
-    k8kreator-msg-info "Installing kubectl ${kubectl_version}"
     curl -s -L -o ${K8KREATOR_BINDIR}/kubectl-${kubectl_version} ${kubectl_url}
     chmod +x ${K8KREATOR_BINDIR}/kubectl-${kubectl_version}
   fi

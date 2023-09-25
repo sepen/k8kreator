@@ -21,7 +21,6 @@ k8kreator-tools-install-helm() {
 
   if [ ! -f ${K8KREATOR_BINDIR}/helm-${helm_version} ]; then
     k8kreator-check-deps "curl" "mkdir" "tar" "cp" "chmod" "rm"
-    k8kreator-msg-info "Installing helm ${helm_version}"
     curl -s -L -o ${K8KREATOR_TMPDIR}/helm-${helm_version}.tar.gz ${helm_url}
     mkdir -p ${K8KREATOR_TMPDIR}/helm-${helm_version}
     tar -C ${K8KREATOR_TMPDIR}/helm-${helm_version} -xf ${K8KREATOR_TMPDIR}/helm-${helm_version}.tar.gz

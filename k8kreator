@@ -35,7 +35,7 @@ Additional flags:
                (example: export K8KREATOR_TARGET=default.kind.local)
 
 Available cluster targets:
-  default.kind.local        (default when target is not specified)
+  default.kind.local        (default target when not specified)
   default.k3d.local
   default.minikube.local
 
@@ -139,6 +139,7 @@ k8kreator-addons-install() {
     addon_name=${addon%%=*}
     addon_version=${addon##*=}
     source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
+    k8kreator-msg-info "Installing addon ${addon_name} ${addon_version}"
     k8kreator-addons-install-${addon_name} ${addon_version}
   done
 }
@@ -150,6 +151,7 @@ k8kreator-addons-update() {
     addon_name=${addon%%=*}
     addon_version=${addon##*=}
     source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
+    k8kreator-msg-info "Updating addon ${addon_name} ${addon_version}"
     k8kreator-addons-update-${addon_name} ${addon_version}
   done
 }
@@ -161,6 +163,7 @@ k8kreator-addons-uninstall() {
     addon_name=${addon%%=*}
     addon_version=${addon##*=}
     source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
+    k8kreator-msg-info "Uninstalling addon ${addon_name} ${addon_version}"
     k8kreator-addons-uninstall-${addon_name} ${addon_version}
   done
 }
@@ -185,6 +188,7 @@ k8kreator-tools-install() {
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
     source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
+    k8kreator-msg-info "Installing tool ${tool_name} ${tool_version}"
     k8kreator-tools-install-${tool_name} ${tool_version}
   done
 }
@@ -196,6 +200,7 @@ k8kreator-tools-select() {
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
     source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
+    k8kreator-msg-info "Selecting tool ${tool_name} ${tool_version}"
     k8kreator-tools-select-${tool_name} ${tool_version}
   done
 }
@@ -207,6 +212,7 @@ k8kreator-tools-uninstall() {
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
     source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
+    k8kreator-msg-info "Uninstalling tool ${tool_name} ${tool_version}"
     k8kreator-tools-uninstall-${tool_name} ${tool_version}
   done
 }

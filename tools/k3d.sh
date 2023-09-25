@@ -21,7 +21,6 @@ k8kreator-tools-install-k3d() {
 
   if [ ! -f ${K8KREATOR_BINDIR}/k3d-${k3d_version} ]; then
     k8kreator-check-deps "curl" "chmod"
-    k8kreator-msg-info "Installing k3d ${k3d_version}"
     curl -s -L -o ${K8KREATOR_BINDIR}/k3d-${k3d_version} ${k3d_url}
     chmod +x ${K8KREATOR_BINDIR}/k3d-${k3d_version}
   fi
