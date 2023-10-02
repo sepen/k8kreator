@@ -111,6 +111,7 @@ k8kreator-cluster-list() {
 k8kreator-cluster-create() {
   k8kreator-msg-debug "Running function k8kreator-cluster-create (${K8KREATOR_TARGET})"
   source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/target.sh
+  k8kreator-msg-info "Installing and selecting tools"
   k8kreator-tools-install
   k8kreator-tools-select
   k8kreator-msg-info "Creating cluster ${K8KREATOR_TARGET}"
@@ -120,9 +121,10 @@ k8kreator-cluster-create() {
 k8kreator-cluster-delete() {
   k8kreator-msg-debug "Running function k8kreator-cluster-delete (${K8KREATOR_TARGET})"
   source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/target.sh
-  k8kreator-tools-uninstall
   k8kreator-msg-info "Deleting cluster ${K8KREATOR_TARGET}"
   k8kreator-cluster-delete-target
+  k8kreator-msg-info "Uninstalling tools"
+  k8kreator-tools-uninstall
 }
 
 # =============================================================================
