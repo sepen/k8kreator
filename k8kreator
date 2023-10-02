@@ -11,7 +11,10 @@ k8kreator-msg-debug() {
 }
 
 k8kreator-msg-info() {
-  echo "$@"
+  local msgprefix='\033[1;34m'
+  local msgsuffix='\033[0m'
+  [ ${K8KREATOR_NOCOLOR} -eq 1 ] && msgprefix=''
+  echo -e "${msgprefix}**${msgsuffix} $@"
 }
 
 k8kreator-msg-error() {
@@ -254,6 +257,7 @@ fi
 
 # Readonly variables
 readonly K8KREATOR_DEBUG=${K8KREATOR_DEBUG:-0}
+readonly K8KREATOR_NOCOLOR=${K8KREATOR_NOCOLOR:-0}
 readonly K8KREATOR_HOME="${K8KREATOR_HOME:-${HOME}/.k8kreator}"
 readonly K8KREATOR_BINDIR="${K8KREATOR_BINDIR:-${K8KREATOR_HOME}/bin}"
 readonly K8KREATOR_SRCDIR="${K8KREATOR_SRCDIR:-${K8KREATOR_HOME}/src}"
