@@ -10,7 +10,7 @@ k8kreator-addons-install-jenkins() {
 k8kreator-addons-update-jenkins() {
   k8kreator-msg-debug "Running function k8kreator-addons-update-jenkins $@ (${K8KREATOR_TARGET})"
   local addon_version=$1
-  ${HELM_COMMAND} upgrade jenkins jenkins ${HELM_COMMAND_OPTS} \
+  ${HELM_COMMAND} upgrade jenkins jenkins \
     --repo https://charts.jenkins.io \
     --version ${addon_version} \
     --create-namespace --namespace jenkins \

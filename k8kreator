@@ -5,8 +5,11 @@
 # =============================================================================
 
 k8kreator-msg-debug() {
+  local msgprefix='\033[1;33m'
+  local msgsuffix='\033[0m'
   if [ ${K8KREATOR_DEBUG} -eq 1 ]; then
-    echo "[k8kreator] DEBUG - $@"
+    [ ${K8KREATOR_NOCOLOR} -eq 1 ] && msgprefix=''
+    echo -e "${msgprefix}**${msgsuffix} $@"
   fi
 }
 
@@ -18,7 +21,10 @@ k8kreator-msg-info() {
 }
 
 k8kreator-msg-error() {
-  echo "[k8kreator] ERROR - $@" 2>&1
+  local msgprefix='\033[1;31m'
+  local msgsuffix='\033[0m'
+  [ ${K8KREATOR_NOCOLOR} -eq 1 ] && msgprefix=''
+  echo -e "${msgprefix}**${msgsuffix} $@" 2>&1
   exit 1
 }
 
@@ -34,10 +40,12 @@ Where commands and their actions are:
   k8kreator help
 
 Additional flags:
-  -t <target>  Where target can be passed also from the environment vars
-               Example:
-                  $ export K8KREATOR_TARGET="default.kind.local"
+  -t <target>           Cluster target. Overrides K8KREATOR_TARGET from environment
 
+Environment vars:
+  K8KREATOR_DEBUG       0-Enable/1-Disable debugging messages (current: "${K8KREATOR_DEBUG}")
+  K8KREATOR_NOCOLOR     0-Enable/1-Disable color ouput (current: "${K8KREATOR_NOCOLOR}")
+  K8KREATOR_TARGET      Cluster target (current: "${K8KREATOR_TARGET}")
 __help__
   exit 0
 }
@@ -49,6 +57,11 @@ k8kreator-check-deps() {
       k8kreator-msg-error "Dependency '$dep' not found."
     fi
   done
+}
+
+k8kreator-get-engine() {
+  local name_and_engine="${K8KREATOR_TARGET%.*}" # example: default.kind
+  echo "${name_and_engine#*.}" # example: kind
 }
 
 k8kreator-get-tool-command() {
@@ -283,7 +296,7 @@ while [ $1 ]; do
 done
 
 # Get cluster engine from target
-readonly K8KREATOR_ENGINE=${K8KREATOR_TARGET%%.*}
+readonly K8KREATOR_ENGINE=$(k8kreator-get-engine)
 
 # Get command, action, function and args to execute from array
 readonly K8KREATOR_COMMAND=${userinput[0]}

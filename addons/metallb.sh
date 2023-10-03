@@ -19,6 +19,7 @@ post-install() {
   # This pool of IPs must be dedicated to MetalLB's use, you can't reuse the Kubernetes node IPs or IPs handed out by a DHCP server.
 
   # Determine load balancer ingress range depending on the engine in use
+  local base_ip_addr="172.20.0.10"
   case ${K8KREATOR_ENGINE} in
     kind)
       k8kreator-check-deps "docker" "sed"
@@ -34,9 +35,9 @@ post-install() {
       ;;
   esac
 
-  # We use a static range of 50 address (from .100 to .150)
-  ingress_first_addr=$(echo "${base_ip_addr%.*}.100")
-  ingress_last_addr=$(echo "${base_ip_addr%.*}.150")
+  # We use a static range of 30 address (from .20 to .50)
+  ingress_first_addr=$(echo "${base_ip_addr%.*}.20")
+  ingress_last_addr=$(echo "${base_ip_addr%.*}.50")
   k8kreator-msg-debug "MetalLB ingress address range: $ingress_first_addr-$ingress_last_addr"
 
   # Configure metallb ingress address range
@@ -67,6 +68,7 @@ __YAML__
   # After creating the previous objects, MetalLB takes ownership of one of the IP addresses in the pool and updates
   # the *loadBalancer* IP field of the `ingress-nginx` Service accordingly.
   ${KUBECTL_COMMAND} delete pods,services --all -n metallb-system
+  # Give enough time to new pods
   sleep 5
 }
 

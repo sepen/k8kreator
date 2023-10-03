@@ -10,7 +10,7 @@ k8kreator-addons-install-ingress-nginx() {
 k8kreator-addons-update-ingress-nginx() {
   k8kreator-msg-debug "Running function k8kreator-addons-update-ingress-nginx $@ (${K8KREATOR_TARGET})"
   local addon_version=$1
-  ${HELM_COMMAND} upgrade ingress-nginx ingress-nginx ${HELM_COMMAND_OPTS} \
+  ${HELM_COMMAND} upgrade ingress-nginx ingress-nginx \
     --repo https://kubernetes.github.io/ingress-nginx \
     --version ${addon_version} \
     --create-namespace --namespace ingress-nginx \
