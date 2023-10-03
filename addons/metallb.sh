@@ -6,7 +6,7 @@ KUBECTL_COMMAND=$(k8kreator-get-tool-command "kubectl")
 pre-install() {
   k8kreator-check-deps "sed"
   # If you are using kube-proxy in IPVS mode, since Kubernetes v1.14.2 you have to enable strict ARP mode.
-  if ${KUBECTL_COMMAND} get configmap kube-proxy -n kube-system; then
+  if ${KUBECTL_COMMAND} get configmap kube-proxy -n kube-system 2>/dev/null; then
     ${KUBECTL_COMMAND} get configmap kube-proxy -n kube-system -o yaml \
     | sed -e 's/strictARP: false/strictARP: true/' \
     | ${KUBECTL_COMMAND} apply -f - -n kube-system
@@ -37,6 +37,7 @@ post-install() {
   # We use a static range of 50 address (from .100 to .150)
   ingress_first_addr=$(echo "${base_ip_addr%.*}.100")
   ingress_last_addr=$(echo "${base_ip_addr%.*}.150")
+  k8kreator-msg-debug "MetalLB ingress address range: $ingress_first_addr-$ingress_last_addr"
 
   # Configure metallb ingress address range
   cat << __YAML__ | kubectl apply -f -
@@ -51,7 +52,7 @@ data:
     - name: default
       protocol: layer2
       addresses:
-      - $INGRESS_FIRST_ADDR-$INGRESS_LAST_ADDR
+      - $ingress_first_addr-$ingress_last_addr
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
