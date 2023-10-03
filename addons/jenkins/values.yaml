@@ -1,0 +1,39 @@
+# https://github.com/jenkinsci/helm-charts
+# https://github.com/jenkinsci/helm-charts/blob/main/charts/jenkins/README.md
+
+
+controller:
+
+  # Ingress configuration
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostName: jenkins.kind.local
+
+  # This is required when TLS is not enabled
+  jenkinsUrlProtocol: "http"
+
+  # Don't use health probes in local
+  healthProbes: false
+
+  # Installs latest plugins as soon as Jenkins starts
+  initializeOnce: true
+  installLatestPlugins: true
+
+  # Jenkins Configuration as Code
+  JCasC:
+    securityRealm: |-
+      local:
+        allowsSignup: false
+        enableCaptcha: false
+        users:
+        - id: "admin"
+          name: "Jenkins Admin"
+          password: "myawesomejenkins"
+    authorizationStrategy: |-
+      loggedInUsersCanDoAnything:
+        allowAnonymousRead: false
+
+# Storage persistance configuration
+persistence:
+  enabled: false

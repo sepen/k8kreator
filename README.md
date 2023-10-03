@@ -49,3 +49,10 @@ The cluster _addons_ that come in the default targets are the following:
 [ingress-nginx]: https://github.com/kubernetes/ingress-nginx/
 
 In addition to targets above you can add your own custom _target_. To create it you can use _default_ targets as a template and remove or add addons as needed.
+
+
+## Important Notes
+
+With Docker on _Linux_, you can send traffic directly to the loadbalancer’s external IP if the IP space is within the docker IP space.
+
+On _macOS_ and _Windows_, docker does not expose the docker network to the host. Because of this limitation, containers (including nodes) are only reachable from the host via port-forwards, however other containers/pods can reach other things running in docker including loadbalancers. You may want to check out the [Ingress Guide](https://kind.sigs.k8s.io/docs/user/ingress) as a cross-platform workaround. You can also expose pods and services using extra port mappings.

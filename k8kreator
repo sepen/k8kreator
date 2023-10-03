@@ -34,13 +34,9 @@ Where commands and their actions are:
   k8kreator help
 
 Additional flags:
-  -t <target>  Where target can be also exported via environment variable
-               (example: export K8KREATOR_TARGET=default.kind.local)
-
-Available cluster targets:
-  default.kind.local        (default target when not specified)
-  default.k3d.local
-  default.minikube.local
+  -t <target>  Where target can be passed also from the environment vars
+               Example:
+                  $ export K8KREATOR_TARGET="default.kind.local"
 
 __help__
   exit 0
