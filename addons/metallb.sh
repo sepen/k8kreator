@@ -42,18 +42,15 @@ post-install() {
 
   # Configure metallb ingress address range
   cat << __YAML__ | kubectl apply -f -
-apiVersion: v1
-kind: ConfigMap
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
 metadata:
+  name: default
   namespace: metallb-system
-  name: config
-data:
-  config: |
-    address-pools:
-    - name: default
-      protocol: layer2
-      addresses:
-      - $ingress_first_addr-$ingress_last_addr
+spec:
+  addresses:
+  - $ingress_first_addr-$ingress_last_addr
+  autoAssign: true
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
@@ -69,7 +66,7 @@ __YAML__
   # the *loadBalancer* IP field of the `ingress-nginx` Service accordingly.
   ${KUBECTL_COMMAND} delete pods,services --all -n metallb-system
   # Give enough time to new pods
-  sleep 5
+  sleep 10
 }
 
 k8kreator-addons-install-metallb() {

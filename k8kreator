@@ -84,7 +84,7 @@ k8kreator-self-install() {
   if [ -d ${K8KREATOR_SRCDIR} ]; then
     k8kreator-msg-error "k8kreator previously installed. Please remove it or run 'self update' command."
   fi
-  k8kreator-msg-info "Installing ${K8KREATOR_SRCDIR}"
+  k8kreator-msg-debug "Installing ${K8KREATOR_SRCDIR}"
   mkdir -p ${K8KREATOR_BINDIR} ${K8KREATOR_TMPDIR}
   git clone ${K8KREATOR_GITHUB_REPO} ${K8KREATOR_SRCDIR} --quiet
   ln -svf ../src/k8kreator ${K8KREATOR_BINDIR}/k8kreator
@@ -98,7 +98,7 @@ k8kreator-self-update() {
   if [ ! -d ${K8KREATOR_SRCDIR} ]; then
     k8kreator-msg-error "Cannot update k8kreator. You need to install it first."
   fi
-  k8kreator-msg-info "Updating ${K8KREATOR_SRCDIR}"
+  k8kreator-msg-debug "Updating ${K8KREATOR_SRCDIR}"
   cd ${K8KREATOR_SRCDIR} && git pull --rebase origin main --quiet
   k8kreator-msg-info "Updated successfully!"
 }
