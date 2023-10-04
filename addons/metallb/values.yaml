@@ -1,6 +1,7 @@
-# https://github.com/metallb/metallb
-# https://github.com/metallb/metallb/tree/main/charts/metallb
-# https://github.com/metallb/metallb/blob/main/charts/metallb/values.yaml
+# Name:    metallb
+# Website: https://metallb.universe.tf
+# Chart:   https://github.com/metallb/metallb/tree/main/charts/metallb
+# Values:  https://github.com/metallb/metallb/blob/main/charts/metallb/values.yaml
 
 nameOverride: "metallb"
 fullnameOverride: ""
