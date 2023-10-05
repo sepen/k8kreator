@@ -5,26 +5,26 @@
 # =============================================================================
 
 k8kreator-msg-debug() {
-  local msgprefix='\033[1;33m'
+  local msgprefix='\033[1;33m**'
   local msgsuffix='\033[0m'
   if [ ${K8KREATOR_DEBUG} -eq 1 ]; then
-    [ ${K8KREATOR_NOCOLOR} -eq 1 ] && msgprefix=''
-    echo -e "${msgprefix}**${msgsuffix} $@"
+    [ ${K8KREATOR_NOCOLOR} -eq 1 ] && msgprefix='[debug]'
+    echo -e "${msgprefix}${msgsuffix} $@"
   fi
 }
 
 k8kreator-msg-info() {
-  local msgprefix='\033[1;34m'
+  local msgprefix='\033[1;34m**'
   local msgsuffix='\033[0m'
-  [ ${K8KREATOR_NOCOLOR} -eq 1 ] && msgprefix=''
-  echo -e "${msgprefix}**${msgsuffix} $@"
+  [ ${K8KREATOR_NOCOLOR} -eq 1 ] && msgprefix='**'
+  echo -e "${msgprefix}${msgsuffix} $@"
 }
 
 k8kreator-msg-error() {
-  local msgprefix='\033[1;31m'
+  local msgprefix='\033[1;31m**'
   local msgsuffix='\033[0m'
-  [ ${K8KREATOR_NOCOLOR} -eq 1 ] && msgprefix=''
-  echo -e "${msgprefix}**${msgsuffix} $@" 2>&1
+  [ ${K8KREATOR_NOCOLOR} -eq 1 ] && msgprefix='[error]'
+  echo -e "${msgprefix}${msgsuffix} $@" 2>&1
   exit 1
 }
 
@@ -122,6 +122,9 @@ k8kreator-cluster-list() {
 
 k8kreator-cluster-create() {
   k8kreator-msg-debug "Running function k8kreator-cluster-create (${K8KREATOR_TARGET})"
+  if [ ! -f ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/target.sh ]; then
+    k8kreator-msg-error "Cluster target not found ${K8KREATOR_TARGET}"
+  fi
   source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/target.sh
   k8kreator-msg-info "Installing and selecting tools"
   k8kreator-tools-install
@@ -132,6 +135,9 @@ k8kreator-cluster-create() {
 
 k8kreator-cluster-delete() {
   k8kreator-msg-debug "Running function k8kreator-cluster-delete (${K8KREATOR_TARGET})"
+  if [ ! -f ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/target.sh ]; then
+    k8kreator-msg-error "Cluster target not found ${K8KREATOR_TARGET}"
+  fi
   source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/target.sh
   k8kreator-msg-info "Deleting cluster ${K8KREATOR_TARGET}"
   k8kreator-cluster-delete-target
@@ -169,6 +175,9 @@ k8kreator-addons-install() {
   for addon in ${K8KREATOR_ADDONS[@]}; do
     addon_name=${addon%%=*}
     addon_version=${addon##*=}
+    if [ ! -f ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh ]; then
+      k8kreator-msg-error "Addon not found ${addon_name}"
+    fi
     source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
     k8kreator-msg-info "Installing addon ${addon_name} ${addon_version}"
     k8kreator-addons-install-${addon_name} ${addon_version} || break
@@ -181,6 +190,9 @@ k8kreator-addons-update() {
   for addon in ${K8KREATOR_ADDONS[@]}; do
     addon_name=${addon%%=*}
     addon_version=${addon##*=}
+    if [ ! -f ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh ]; then
+      k8kreator-msg-error "Addon not found ${addon_name}"
+    fi
     source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
     k8kreator-msg-info "Updating addon ${addon_name} ${addon_version}"
     k8kreator-addons-update-${addon_name} ${addon_version} || break
@@ -193,6 +205,9 @@ k8kreator-addons-uninstall() {
   for addon in ${K8KREATOR_ADDONS[@]}; do
     addon_name=${addon%%=*}
     addon_version=${addon##*=}
+    if [ ! -f ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh ]; then
+      k8kreator-msg-error "Addon not found ${addon_name}"
+    fi
     source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
     k8kreator-msg-info "Uninstalling addon ${addon_name} ${addon_version}"
     k8kreator-addons-uninstall-${addon_name} ${addon_version} || break
@@ -230,6 +245,9 @@ k8kreator-tools-install() {
   for tool in ${K8KREATOR_TOOLS[@]}; do
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
+    if [ ! -f ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh ]; then
+      k8kreator-msg-error "Addon not found ${tool_name}"
+    fi
     source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
     k8kreator-msg-info "Installing tool ${tool_name} ${tool_version}"
     k8kreator-tools-install-${tool_name} ${tool_version} || break
@@ -242,6 +260,9 @@ k8kreator-tools-select() {
   for tool in ${K8KREATOR_TOOLS[@]}; do
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
+    if [ ! -f ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh ]; then
+      k8kreator-msg-error "Addon not found ${tool_name}"
+    fi
     source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
     k8kreator-msg-info "Selecting tool ${tool_name} ${tool_version}"
     k8kreator-tools-select-${tool_name} ${tool_version} || break
@@ -254,6 +275,9 @@ k8kreator-tools-uninstall() {
   for tool in ${K8KREATOR_TOOLS[@]}; do
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
+    if [ ! -f ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh ]; then
+      k8kreator-msg-error "Addon not found ${tool_name}"
+    fi
     source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
     k8kreator-msg-info "Uninstalling tool ${tool_name} ${tool_version}"
     k8kreator-tools-uninstall-${tool_name} ${tool_version} || break
