@@ -335,6 +335,9 @@ k8kreator-msg-debug "K8KREATOR_TARGET: ${K8KREATOR_TARGET}"
 k8kreator-msg-debug "K8KREATOR_ENGINE: ${K8KREATOR_ENGINE}"
 k8kreator-msg-debug "K8KREATOR_FUNCTION: ${K8KREATOR_FUNCTION}"
 
+# Use our own kubeconfig
+export KUBECONFIG=$(K8KREATOR_HOME)/kubeconfig
+
 # Check if funcion exists
 if ! declare -f ${K8KREATOR_FUNCTION} >/dev/null 2>&1; then
   k8kreator-msg-help

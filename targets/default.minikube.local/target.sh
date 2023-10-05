@@ -8,7 +8,7 @@ k8kreator-cluster-create-target() {
   ${MINIKUBE_COMMAND} start \
     --kubernetes-version="${KUBERNETES_VERSION}" \
     --dns-domain="${K8KREATOR_TARGET}" \
-    --keep-context=true
+    --keep-context=false
 }
 
 k8kreator-cluster-delete-target() {
