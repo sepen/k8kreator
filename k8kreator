@@ -130,7 +130,10 @@ k8kreator-cluster-create() {
   k8kreator-tools-install
   k8kreator-tools-select
   k8kreator-msg-info "Creating cluster ${K8KREATOR_TARGET}"
-  k8kreator-cluster-create-target 
+  k8kreator-cluster-create-target
+  k8kreator-msg-info "Created successfully!"
+  k8kreator-msg-info "IMPORTANT: To finish do you need to export KUBECONFIG as for example:"
+  k8kreator-msg-info "  export KUBECONFIG=\$HOME/.k8kreator/kubeconfig"
 }
 
 k8kreator-cluster-delete() {
@@ -143,6 +146,7 @@ k8kreator-cluster-delete() {
   k8kreator-cluster-delete-target
   k8kreator-msg-info "Uninstalling tools"
   k8kreator-tools-uninstall
+  k8kreator-msg-info "Deleted successfully!"
 }
 
 # =============================================================================
