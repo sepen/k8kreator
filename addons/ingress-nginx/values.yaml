@@ -1,5 +1,7 @@
-# https://github.com/kubernetes/ingress-nginx
-# https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx
+# Name:    ingress-nginx
+# Website: https://github.com/kubernetes/ingress-nginx
+# Chart:   https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx
+# Values:  https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
 
 controller:
 

@@ -1,6 +1,7 @@
-# https://github.com/jenkinsci/helm-charts
-# https://github.com/jenkinsci/helm-charts/blob/main/charts/jenkins/README.md
-
+# Name:    jenkins
+# Website: https://www.jenkins.io/
+# Chart:   https://github.com/jenkinsci/helm-charts/tree/main/charts/jenkins
+# Values:  https://github.com/jenkinsci/helm-charts/blob/main/charts/jenkins/values.yaml
 
 controller:
 
@@ -41,3 +42,5 @@ controller:
 # Storage persistance configuration
 persistence:
   enabled: false
+
+# End of file

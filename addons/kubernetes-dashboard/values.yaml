@@ -1,0 +1,120 @@
+# Name:    kubernetes-dashboard
+# Website: https://github.com/kubernetes/dashboard 
+# Chart:   https://github.com/kubernetes/dashboard/tree/master/charts/helm-chart/kubernetes-dashboard
+# Values:  https://github.com/kubernetes/dashboard/blob/master/charts/helm-chart/kubernetes-dashboard/values.yaml
+
+# General configuration shared across resources
+app:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    paths:
+      web: /
+      api: /api
+
+
+# API deployment configuration
+api:
+  role: api
+  image:
+    repository: docker.io/kubernetesui/dashboard-api
+    tag: v1.0.0
+  containers:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 200Mi
+      limits:
+        cpu: 250m
+        memory: 400Mi
+
+# WEB UI deployment configuration
+web:
+  role: web
+  image:
+    repository: docker.io/kubernetesui/dashboard-web
+    tag: v1.0.0
+  containers:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 200Mi
+      limits:
+        cpu: 250m
+        memory: 400Mi
+
+
+### Metrics Scraper
+### Container to scrape, store, and retrieve a window of time from the Metrics Server.
+### refs: https://github.com/kubernetes-sigs/dashboard-metrics-scraper
+metricsScraper:
+  enabled: true
+  role: metrics-scraper
+  containers:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 200Mi
+      limits:
+        cpu: 250m
+        memory: 400Mi
+
+## Optional Metrics Server sub-chart configuration
+## Enable this if you don't already have metrics-server enabled on your cluster and
+## want to use it with dashboard metrics-scraper
+## refs:
+##  - https://github.com/kubernetes-sigs/metrics-server
+##  - https://github.com/kubernetes-sigs/metrics-server/tree/master/charts/metrics-server
+metrics-server:
+  enabled: true
+  args:
+    - --kubelet-preferred-address-types=InternalIP
+    - --kubelet-insecure-tls
+
+## Optional Cert Manager sub-chart configuration
+## Enable this if you don't already have cert-manager enabled on your cluster.
+cert-manager:
+  enabled: true
+  installCRDs: true
+
+## Optional Nginx Ingress sub-chart configuration
+## Enable this if you don't already have nginx-ingress enabled on your cluster.
+nginx:
+  enabled: false
+
+## Extra configurations:
+## - manifests
+## - predefined roles
+## - prometheus
+## - etc...
+extras:
+  # Extra Kubernetes manifests to be deployed
+  # manifests:
+  # - apiVersion: v1
+  #   kind: ConfigMap
+  #   metadata:
+  #     name: additional-configmap
+  #   data:
+  #     mykey: myvalue
+  manifests: []
+  # Start in ReadOnly mode.
+  # Specifies whether cluster-wide RBAC resources (ClusterRole, ClusterRolebinding) with read only permissions to all resources listed inside the cluster should be created
+  # Only dashboard-related Secrets and ConfigMaps will still be available for writing.
+  #
+  # The basic idea of the clusterReadOnlyRole
+  # is not to hide all the secrets and sensitive data but more
+  # to avoid accidental changes in the cluster outside the standard CI/CD.
+  #
+  # It is NOT RECOMMENDED to use this version in production.
+  # Instead, you should review the role and remove all potentially sensitive parts such as
+  # access to persistentvolumes, pods/log etc.
+  clusterReadOnlyRole: false
+  # It is possible to add additional rules if read only role is enabled.
+  # This can be useful, for example, to show CRD resources.
+  clusterReadOnlyRoleAdditionalRules: []
+  serviceMonitor:
+    # Whether to create a Prometheus Operator service monitor.
+    enabled: false
+
+
+# End of file
