@@ -21,10 +21,6 @@ app:
 
 # API deployment configuration
 api:
-  role: api
-  image:
-    repository: docker.io/kubernetesui/dashboard-api
-    tag: v1.0.0
   containers:
     resources:
       requests:
@@ -36,10 +32,6 @@ api:
 
 # WEB UI deployment configuration
 web:
-  role: web
-  image:
-    repository: docker.io/kubernetesui/dashboard-web
-    tag: v1.0.0
   containers:
     resources:
       requests:
@@ -55,7 +47,6 @@ web:
 ### refs: https://github.com/kubernetes-sigs/dashboard-metrics-scraper
 metricsScraper:
   enabled: true
-  role: metrics-scraper
   containers:
     resources:
       requests:

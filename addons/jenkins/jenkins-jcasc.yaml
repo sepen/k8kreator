@@ -1,0 +1,185 @@
+#
+# Jenkins agent configuration
+#
+
+#agent:
+#  podTemplates:
+#    python: |
+#      - name: builder-template
+#        label: builder-custom
+#        serviceAccount: jenkins-admin
+#        containers:
+#          - name: base
+#            image: registry.geoblink.io/geoblink/builder-base:0.1.451
+#            command: "/bin/sh -c"
+#            args: "cat"
+#            ttyEnabled: true
+#            privileged: true
+#            resourceRequestCpu: "0.5"
+#            resourceRequestMemory: "512Mi"
+#            resourceLimitCpu: "1"
+#            resourceLimitMemory: "512Mi"
+#        imagePullSecrets:
+#          - name: docker-registry
+
+#
+# Jenkins controller configuration
+#
+
+controller:
+  #
+  # PLUGINS
+  #
+
+  installPlugins:
+    - ace-editor:latest
+    - ansicolor:latest
+    - ant:latest
+    - antisamy-markup-formatter:latest
+    - apache-httpcomponents-client-4-api:latest
+    - archived-artifact-url-viewer:latest
+    - authentication-tokens:latest
+    - blueocean:latest
+    - blueocean-autofavorite:latest
+    - blueocean-bitbucket-pipeline:latest
+    - blueocean-commons:latest
+    - blueocean-config:latest
+    - blueocean-core-js:latest
+    - blueocean-dashboard:latest
+    - blueocean-display-url:latest
+    - blueocean-events:latest
+    - blueocean-git-pipeline:latest
+    - blueocean-github-pipeline:latest
+    - blueocean-i18n:latest
+    - blueocean-jira:latest
+    - blueocean-jwt:latest
+    - blueocean-personalization:latest
+    - blueocean-pipeline-api-impl:latest
+    - blueocean-pipeline-editor:latest
+    - blueocean-pipeline-scm-api:latest
+    - blueocean-rest:latest
+    - blueocean-rest-impl:latest
+    - blueocean-web:latest
+    - bootstrap4-api:latest
+    - bouncycastle-api:latest
+    - branch-api:latest
+    - build-name-setter
+    - categorized-view:latest
+    - checks-api:latest
+    - cloudbees-bitbucket-branch-source:latest
+    - cloudbees-disk-usage-simple:latest
+    - cloudbees-folder:latest
+    - command-launcher:latest
+    - configuration-as-code:latest
+    - config-file-provider:latest
+    - credentials:latest
+    - credentials-binding:latest
+    - cron_column:latest
+    - display-url-api:latest
+    - docker-commons:latest
+    - docker-workflow:latest
+    - durable-task:latest
+    - echarts-api:latest
+    - extended-read-permission:latest
+    - external-monitor-job:latest
+    - favorite:latest
+    - font-awesome-api:latest
+    - git:latest
+    - git-client:latest
+    - git-server:latest
+    - github:latest
+    - github-api:latest
+    - github-branch-source:latest
+    - google-login:latest
+    - gradle:latest
+    - handlebars:latest
+    - handy-uri-templates-2-api:latest
+    - htmlpublisher:latest
+    - jackson2-api:latest
+    - javadoc:latest
+    - jdk-tool:latest
+    - jenkins-design-language:latest
+    - jira:latest
+    - job-dsl:1.77
+    - jquery3-api:latest
+    - jsch:latest
+    - junit:latest
+    - kubernetes:latest
+    - kubernetes-client-api:latest
+    - kubernetes-credentials:latest
+    - kubernetes-credentials-provider:latest
+    - ldap:latest
+    - lockable-resources:latest
+    - mailer:latest
+    - matrix-auth:latest
+    - matrix-project:latest
+    - maven-plugin:latest
+    - mercurial:latest
+    - metrics:latest
+    - momentjs:latest
+    - next-executions:latest
+    - pam-auth:latest
+    - okhttp-api:latest
+    - parameterized-scheduler:latest
+    - pipeline-build-step:latest
+    - pipeline-graph-analysis:latest
+    - pipeline-input-step:latest
+    - pipeline-milestone-step:latest
+    - pipeline-model-api:latest
+    - pipeline-model-definition:latest
+    - pipeline-model-extensions:latest
+    - pipeline-rest-api:latest
+    - pipeline-stage-step:latest
+    - pipeline-stage-tags-metadata:latest
+    - pipeline-stage-view:latest
+    - plain-credentials:latest
+    - plugin-util-api:latest
+    - popper-api:latest
+    - progress-bar-column-plugin:latest
+    - prometheus:latest
+    - pubsub-light:latest
+    - purge-build-queue-plugin:latest
+    - resource-disposer:latest
+    - scm-api:latest
+    - script-security:latest
+    - simple-theme-plugin:latest
+    - slack:latest
+    - snakeyaml-api:latest
+    - sse-gateway:latest
+    - ssh-credentials:latest
+    - ssh-steps:latest
+    - structs:latest
+    - support-core:latest
+    - timestamper:latest
+    - testng-plugin:latest
+    - token-macro:latest
+    - trilead-api:latest
+    - variant:latest
+    - windows-slaves:latest
+    - workflow-aggregator:latest
+    - workflow-api:latest
+    - workflow-basic-steps:latest
+    - workflow-cps:latest
+    - workflow-cps-global-lib:latest
+    - workflow-durable-task-step:latest
+    - workflow-job:latest
+    - workflow-multibranch:latest
+    - workflow-scm-step:latest
+    - workflow-step-api:latest
+    - workflow-support:latest
+    - ws-cleanup:latest
+
+
+  JCasC:
+    configScripts:
+      credentials: |
+        credentials:
+          system:
+            domainCredentials:
+              - credentials:
+                - usernamePassword:
+                  scope: GLOBAL
+                  id: test
+                  username: test-user
+                  password: test-pass
+                  description: Test credentials
