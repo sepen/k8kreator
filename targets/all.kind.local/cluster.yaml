@@ -3,7 +3,7 @@
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 
-name: jenkins.kind.local
+name: all.kind.local
 
 nodes:
 
@@ -11,12 +11,12 @@ nodes:
   # https://hub.docker.com/r/kindest/node/tags
   image: kindest/node:v1.27.3@sha256:3966ac761ae0136263ffdb6cfd4db23ef8a83cba8a463690e98317add2c9ba72
   labels:
-    cluster-target: jenkins.kind.local
+    cluster-target: all.kind.local
     cluster-role: master
 
 - role: worker
   # https://hub.docker.com/r/kindest/node/tags
   image: kindest/node:v1.27.3@sha256:3966ac761ae0136263ffdb6cfd4db23ef8a83cba8a463690e98317add2c9ba72
   labels:
-    cluster-target: jenkins.kind.local
+    cluster-target: all.kind.local
     cluster-role: node
