@@ -12,7 +12,9 @@ app:
       web: /
       api: /api
     issuer:
-      name: selfsigned
+      # TODO: patch kubernetes-dashboard/templates/networking/post-install-ingress-issuer.yaml
+      #name: selfsigned
+      name: none
       # Scope determines what kind of issuer annotation will be used on ingress resource
       # - default - adds 'cert-manager.io/issuer'
       # - cluster - adds 'cert-manager.io/cluster-issuer'
