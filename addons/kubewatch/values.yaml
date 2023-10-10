@@ -1,0 +1,69 @@
+# Name:    kubewatch
+# Website: https://github.com/robusta-dev/kubewatch
+# Chart:   https://github.com/robusta-dev/kubewatch/tree/master/helm/kubewatch
+# Values:  https://github.com/robusta-dev/kubewatch/blob/master/helm/kubewatch/values.yaml
+
+slack:
+  enabled: false
+
+slackwebhook:
+  enabled: false
+
+hipchat:
+  enabled: false
+
+mattermost:
+  enabled: false
+
+flock:
+  enabled: false
+
+msteams:
+  enabled: false
+
+webhook:
+  enabled: false
+
+cloudevent:
+  enabled: false
+
+lark:
+  enabled: false
+
+smtp:
+  enabled: false
+
+resourcesToWatch:
+  deployment: true
+  replicationcontroller: false
+  replicaset: false
+  daemonset: false
+  services: false
+  pod: true
+  job: true
+  persistentvolume: false
+  event: true
+
+replicaCount: 1
+
+podSecurityContext:
+  enabled: false
+
+containerSecurityContext:
+  enabled: false
+
+resources:
+  limits: {}
+  requests: {}
+
+startupProbe:
+  enabled: false
+
+livenessProbe:
+  enabled: false
+
+readinessProbe:
+  enabled: false
+
+rbac:
+  create: true
