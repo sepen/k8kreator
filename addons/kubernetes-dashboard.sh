@@ -6,6 +6,11 @@ KUBECTL_COMMAND=$(k8kreator-get-tool-command "kubectl")
 pre-install() {
   k8kreator-check-deps "awk"
   cat << __YAML__ | ${KUBECTL_COMMAND} apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kubernetes-dashboard
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
