@@ -8,6 +8,9 @@ app:
   ingress:
     enabled: true
     ingressClassName: nginx
+    hosts:
+      - dashboard
+      - localhost
     paths:
       web: /
       api: /api
