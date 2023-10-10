@@ -10,7 +10,6 @@ app:
     ingressClassName: nginx
     hosts:
       - dashboard
-      - localhost
     paths:
       web: /
       api: /api

@@ -6,7 +6,7 @@ KUBECTL_COMMAND=$(k8kreator-get-tool-command "kubectl")
 pre-install() {
   k8kreator-check-deps "sed"
   # If you are using kube-proxy in IPVS mode, since Kubernetes v1.14.2 you have to enable strict ARP mode.
-  if ${KUBECTL_COMMAND} get configmap kube-proxy -n kube-system 2>/dev/null; then
+  if ${KUBECTL_COMMAND} get configmap kube-proxy -n kube-system >/dev/null 2>&1; then
     ${KUBECTL_COMMAND} get configmap kube-proxy -n kube-system -o yaml \
     | sed -e 's/strictARP: false/strictARP: true/' \
     | ${KUBECTL_COMMAND} apply -f - -n kube-system

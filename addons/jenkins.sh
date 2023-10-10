@@ -16,7 +16,7 @@ k8kreator-addons-update-jenkins() {
     --create-namespace --namespace jenkins \
     --install --atomic --cleanup-on-fail \
     -f ${K8KREATOR_SRCDIR}/addons/jenkins/values.yaml \
-    --set controller.ingress.hostname=jenkins.${K8KREATOR_TARGET}
+    --set controller.ingress.hostName="jenkins.${K8KREATOR_TARGET}"
 }
 
 k8kreator-addons-uninstall-jenkins() {
