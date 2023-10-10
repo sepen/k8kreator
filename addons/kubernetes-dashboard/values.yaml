@@ -1,5 +1,5 @@
 # Name:    kubernetes-dashboard
-# Website: https://github.com/kubernetes/dashboard 
+# Website: https://github.com/kubernetes/dashboard
 # Chart:   https://github.com/kubernetes/dashboard/tree/master/charts/helm-chart/kubernetes-dashboard
 # Values:  https://github.com/kubernetes/dashboard/blob/master/charts/helm-chart/kubernetes-dashboard/values.yaml
 
