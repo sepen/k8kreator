@@ -70,13 +70,13 @@ __YAML__
 }
 
 k8kreator-addons-install-metallb() {
-  k8kreator-msg-debug "Running function k8kreator-addons-install-metallb $@ (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-addons-install-metallb"
   # Helm install and upgrade are bassically the same. It just require some helm flags like -i
   k8kreator-addons-update-metallb $@
 }
 
 k8kreator-addons-update-metallb() {
-  k8kreator-msg-debug "Running function k8kreator-addons-update-metallb $@ (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-addons-update-metallb"
   local addon_version=$1
   pre-install
   ${HELM_COMMAND} upgrade metallb metallb \
@@ -84,12 +84,12 @@ k8kreator-addons-update-metallb() {
     --version ${addon_version} \
     --create-namespace --namespace metallb-system \
     --install --atomic --cleanup-on-fail \
-    -f ${K8KREATOR_SRCDIR}/addons/metallb/values.yaml
+    --values ${K8KREATOR_SRCDIR}/addons/metallb/values.yaml
   post-install
 }
 
 k8kreator-addons-uninstall-metallb() {
-  k8kreator-msg-debug "Running function k8kreator-addons-uninstall-metallb $@ (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-addons-uninstall-metallb"
   local addon_version=$1
   ${HELM_COMMAND} uninstall metallb \
     --namespace metallb-system
