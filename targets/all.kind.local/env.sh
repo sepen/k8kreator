@@ -9,6 +9,7 @@ export K8KREATOR_ADDONS=(
     "kubernetes-dashboard=7.0.0-alpha1"
     "kubewatch=3.3.10"
     "jenkins=4.6.6"
+    "prometheus=25.1.0"
 )
 
 # End of file
