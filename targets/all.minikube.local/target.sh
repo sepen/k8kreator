@@ -1,17 +1,20 @@
 #!/usr/bin/env bash
 
-KIND_COMMAND=$(k8kreator-get-tool-command "kind")
+MINIKUBE_COMMAND=$(k8kreator-get-tool-command "minikube")
+KUBERNETES_VERSION="v1.26.8"
 
 k8kreator-cluster-create-target() {
-  k8kreator-check-deps ${KIND_COMMAND}
-  ${KIND_COMMAND} create cluster \
-    --name=${K8KREATOR_TARGET} \
-    --config=${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/cluster.yaml
+  k8kreator-check-deps ${MINIKUBE_COMMAND}
+  ${MINIKUBE_COMMAND} start \
+    --kubernetes-version="${KUBERNETES_VERSION}" \
+    --dns-domain="${K8KREATOR_TARGET}" \
+    --keep-context=false
 }
 
 k8kreator-cluster-delete-target() {
-  k8kreator-check-deps ${KIND_COMMAND}
-  ${KIND_COMMAND} delete clusters ${K8KREATOR_TARGET}
+  local name=${K8KREATOR_TARGET}
+  k8kreator-check-deps ${MINIKUBE_COMMAND}
+  ${MINIKUBE_COMMAND} delete
 }
 
 # End of file

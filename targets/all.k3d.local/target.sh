@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
 
-KIND_COMMAND=$(k8kreator-get-tool-command "kind")
+K3D_COMMAND=$(k8kreator-get-tool-command "k3d")
 
 k8kreator-cluster-create-target() {
-  k8kreator-check-deps ${KIND_COMMAND}
-  ${KIND_COMMAND} create cluster \
-    --name=${K8KREATOR_TARGET} \
-    --config=${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/cluster.yaml
+  k8kreator-check-deps ${K3D_COMMAND}
+  ${K3D_COMMAND} cluster create ${K8KREATOR_TARGET} \
+    --config ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/cluster.yaml
 }
 
 k8kreator-cluster-delete-target() {
-  k8kreator-check-deps ${KIND_COMMAND}
-  ${KIND_COMMAND} delete clusters ${K8KREATOR_TARGET}
+  k8kreator-check-deps ${K3D_COMMAND}
+  ${K3D_COMMAND} cluster delete ${K8KREATOR_TARGET}
 }
 
 # End of file
