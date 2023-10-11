@@ -28,8 +28,27 @@ k8kreator-msg-error() {
   exit 1
 }
 
-k8kreator-msg-help() {
-  cat << __help__
+k8kreator-print-version() {
+  k8kreator-check-deps "git"
+  k8kreator-msg-debug "Getting k8kreator version and latest git hash"
+  local githash=$(cd ${K8KREATOR_SRCDIR} && git rev-parse --short HEAD)
+  cat  << __VERSION__
+k8kreator v${K8KREATOR_VERSION}-${githash}
+__VERSION__
+  exit 0
+}
+
+k8kreator-print-env() {
+  k8kreator-check-deps "env" "grep" "sed"
+  k8kreator-msg-debug "Printing k8kreator environment variables"
+  env | grep 'K8KREATOR_' | sed 's|=| |' | while read key value; do
+    printf "%-20s %-58s\n" ${key} ${value}
+  done
+  exit 0
+}
+
+k8kreator-print-help() {
+  cat << __HELP__
 Usage:
   k8kreator [command]
 
@@ -38,28 +57,29 @@ Available Commands:
   cluster   List, create or delete clusters (it will use K8KREATOR_TARGET)
   addons    Install, update, list or uninstall addons for the cluster target
   tools     Install, update, list or uninstall tools for the cluster target
-  help      Print help information
   version   Print k8kreator version information
   env       Print k8kreator environment variables
+  help      Print help information
 
 Flags:
       --debug        Enable debug messages
       --version      Print k8kreator version information
-  -t, --target id    Set the cluster target. Overrides K8KREATOR_TARGET from environment variable
+      --env          Print k8kreator environment variables
   -h, --help         Print help information
+  -t, --target id    Set the cluster target. Overrides K8KREATOR_TARGET from environment variable
 
 Environment variables:
 
 | Name               | Description                                                              |
 |--------------------|--------------------------------------------------------------------------|
 | K8KREATOR_DEBUG    | Indicate whether or not k8kreator is running in Debug mode               |
-| K8KREATOR_NOCOLOR  | Disable colored output messages. Set K8KREATOR_NOCOLOR=1 to disable      |
-| K8KREATOR_TARGET   | Active cluster target. Run 'k8kreator cluster list' to get all available |
 | K8KREATOR_HOME     | Alternative path for k8kreator's base directory (default ~/.k8kreator)   |
+| K8KREATOR_TARGET   | Active cluster target. Run 'k8kreator cluster list' to get all available |
+| K8KREATOR_NOCOLOR  | Disable colored output messages. Set K8KREATOR_NOCOLOR=1 to disable      |
 | K8KREATOR_BINDIR   | Alternative path for binary files (default ~/.k8kreator/bin)             |
 | K8KREATOR_SRCDIR   | Alternative path for source directory (default ~/.k8kreator/src)         |
 | K8KREATOR_TMPDIR   | Alternative path for temporary files (default ~/.k8kreator/tmp)          |
-__help__
+__HELP__
   exit 0
 }
 
@@ -398,25 +418,32 @@ if [ -z "${BASH_VERSION:-}" ]; then
 fi
 
 # Readonly variables
-readonly K8KREATOR_DEBUG=${K8KREATOR_DEBUG:-0}
-readonly K8KREATOR_NOCOLOR=${K8KREATOR_NOCOLOR:-0}
-readonly K8KREATOR_HOME="${K8KREATOR_HOME:-${HOME}/.k8kreator}"
-readonly K8KREATOR_BINDIR="${K8KREATOR_BINDIR:-${K8KREATOR_HOME}/bin}"
-readonly K8KREATOR_SRCDIR="${K8KREATOR_SRCDIR:-${K8KREATOR_HOME}/src}"
-readonly K8KREATOR_TMPDIR="${K8KREATOR_TMPDIR:-${K8KREATOR_HOME}/tmp}"
+readonly K8KREATOR_VERSION="0.0.1"
 readonly K8KREATOR_GITHUB_REPO="https://github.com/sepen/k8kreator"
+
+# Other global variables
+export K8KREATOR_NOCOLOR=${K8KREATOR_NOCOLOR:-0}
+export K8KREATOR_DEBUG=${K8KREATOR_DEBUG:-0}
+export K8KREATOR_HOME="${K8KREATOR_HOME:-${HOME}/.k8kreator}"
+export K8KREATOR_BINDIR="${K8KREATOR_BINDIR:-${K8KREATOR_HOME}/bin}"
+export K8KREATOR_SRCDIR="${K8KREATOR_SRCDIR:-${K8KREATOR_HOME}/src}"
+export K8KREATOR_TMPDIR="${K8KREATOR_TMPDIR:-${K8KREATOR_HOME}/tmp}"
 
 # Obtain target from environment or input command args, otherwise use defaults.
 export K8KREATOR_TARGET=${K8KREATOR_TARGET:-default.kind.local}
 
 # Check for args
-[ $# -eq 0 ] && k8kreator-msg-help
+[ $# -eq 0 ] && k8kreator-print-help
 
 # Get target and save the rest to an array
 userinput=()
 while [ $1 ]; do
   case $1 in
-    -h|--help) k8kreator-msg-help ;;
+    --nocolor) shift && K8KREATOR_NOCOLOR=1 && continue ;;
+    --debug) shift && K8KREATOR_DEBUG=1 && continue;;
+    --version|version) k8kreator-print-version ;;
+    --env|env) k8kreator-print-env ;;
+    -h|--help|help) k8kreator-print-help ;;
     -t|--target) shift && K8KREATOR_TARGET=$1 && shift ;;
   esac
   userinput+=($1)
@@ -448,7 +475,7 @@ export KUBECONFIG=${K8KREATOR_HOME}/kubeconfig
 
 # Check if funcion exists
 if ! declare -f ${K8KREATOR_FUNCTION} >/dev/null 2>&1; then
-  k8kreator-msg-help
+  k8kreator-print-help
 fi
 
 
