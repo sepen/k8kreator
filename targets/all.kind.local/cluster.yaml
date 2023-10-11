@@ -20,3 +20,5 @@ nodes:
   labels:
     cluster-target: all.kind.local
     cluster-role: node
+
+# End of file
