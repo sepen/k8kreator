@@ -161,13 +161,13 @@ k8kreator-self-update() {
 
 k8kreator-cluster-list() {
   k8kreator-msg-debug "Running function k8kreator-cluster-list (target: ${K8KREATOR_TARGET})"
-  k8kreator-check-deps "find"
+  k8kreator-check-deps "find" "sort"
   k8kreator-msg-info "Listing available cluster targets:"
   find ${K8KREATOR_SRCDIR}/targets -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
-  | while read target; do
+  | sort | while read target; do
     case ${target} in
-      "${K8KREATOR_TARGET}") printf "%-40s [*]\n" ${target} ;;
-      *) printf "%-40s [ ]\n" ${target} ;;
+      "${K8KREATOR_TARGET}") printf "[*] %s\n" ${target} ;;
+      *) printf "[ ] %s\n" ${target} ;;
     esac
   done
 }
