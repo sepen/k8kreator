@@ -63,6 +63,7 @@ Available Commands:
 
 Flags:
       --debug        Enable debug messages
+      --nocolor      Disable colored output mmessages
       --version      Print k8kreator version information
       --env          Print k8kreator environment variables
   -h, --help         Print help information
@@ -451,16 +452,16 @@ while [ $1 ]; do
 done
 
 # Get cluster engine from target
-readonly K8KREATOR_ENGINE=$(k8kreator-get-engine)
+K8KREATOR_ENGINE=$(k8kreator-get-engine)
 
 # Get command, action and function to execute
-readonly K8KREATOR_COMMAND=${userinput[0]}
-readonly K8KREATOR_ACTION=${userinput[1]}
-readonly K8KREATOR_FUNCTION="k8kreator-${K8KREATOR_COMMAND}-${K8KREATOR_ACTION}"
+K8KREATOR_COMMAND=${userinput[0]}
+K8KREATOR_ACTION=${userinput[1]}
+K8KREATOR_FUNCTION="k8kreator-${K8KREATOR_COMMAND}-${K8KREATOR_ACTION}"
 
 # Extra input args
 unset userinput[0] userinput[1]
-readonly K8KREATOR_FUNCTION_ARGS=${userinput[@]}
+K8KREATOR_FUNCTION_ARGS=${userinput[@]}
 
 # Cleanup variable
 unset userinput
