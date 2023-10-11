@@ -34,18 +34,18 @@ Usage:
   k8kreator [command]
 
 Available Commands:
-  self        Install or update k8kreator itself
-  cluster     List, create or delete k8s clusters
-  addons      Install, update, list or uninstall addons
-  tools       Install, update, list or uninstall tools
-  help        Print help information
-  version     Print k8kreator version information
-  env         Print k8kreator environment variables
+  self      Install or update k8kreator itself
+  cluster   List, create or delete clusters (it will use K8KREATOR_TARGET)
+  addons    Install, update, list or uninstall addons for the cluster target
+  tools     Install, update, list or uninstall tools for the cluster target
+  help      Print help information
+  version   Print k8kreator version information
+  env       Print k8kreator environment variables
 
 Flags:
       --debug        Enable debug messages
       --version      Print k8kreator version information
-  -t, --target id    Set the cluster target. Overrides K8KREATOR_TARGET from environment variables
+  -t, --target id    Set the cluster target. Overrides K8KREATOR_TARGET from environment variable
   -h, --help         Print help information
 
 Environment variables:
@@ -73,8 +73,8 @@ k8kreator-check-deps() {
 }
 
 k8kreator-get-engine() {
-  local name_and_engine="${K8KREATOR_TARGET%.*}" # example: default.kind
-  echo "${name_and_engine#*.}" # example: kind
+  local name_and_engine="${K8KREATOR_TARGET%.*}" # remove last suffix from target (e.g. .local)
+  echo "${name_and_engine#*.}" # it will return the engine part of a target (e.g: kind)
 }
 
 k8kreator-get-tool-command() {
