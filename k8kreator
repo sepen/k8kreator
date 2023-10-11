@@ -77,15 +77,33 @@ k8kreator-get-engine() {
   echo "${name_and_engine#*.}" # it will return the engine part of a target (e.g: kind)
 }
 
-k8kreator-get-tool-command() {
+k8kreator-get-addon-version() {
+  local addon_name=$1
+  # it returns addon version
+  source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
+  for addon in ${K8KREATOR_ADDONS[@]}; do
+    case ${addon} in
+      ${addon_name}=*) echo "${addon##*=}" ;;
+    esac
+  done
+}
+
+k8kreator-get-tool-version() {
   local tool_name=$1
-  # it returns tool command and version (example: kubectl-1.27.4, helm-3.12.3, etc.)
+  # it returns tool version
   source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
   for tool in ${K8KREATOR_TOOLS[@]}; do
     case ${tool} in
-      ${tool_name}=*) echo "${tool_name}-${tool##*=}" ;;
+      ${tool_name}=*) echo "${tool##*=}" ;;
     esac
   done
+}
+
+k8kreator-get-tool-command() {
+  local tool_name=$1
+  local tool_version=$(k8kreator-get-tool-version ${tool_name})
+  # it returns tool command and version (example: kubectl-1.27.4, helm-3.12.3, etc.)
+  echo "${tool_name}-${tool_version}"
 }
 
 # =============================================================================
@@ -121,7 +139,7 @@ k8kreator-self-update() {
 # =============================================================================
 
 k8kreator-cluster-list() {
-  k8kreator-msg-debug "Running function k8kreator-cluster-list (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-cluster-list (target: ${K8KREATOR_TARGET})"
   k8kreator-check-deps "find"
   k8kreator-msg-info "Listing available cluster targets:"
   find ${K8KREATOR_SRCDIR}/targets -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
@@ -134,7 +152,7 @@ k8kreator-cluster-list() {
 }
 
 k8kreator-cluster-create() {
-  k8kreator-msg-debug "Running function k8kreator-cluster-create (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-cluster-create (target: ${K8KREATOR_TARGET})"
   if [ ! -f ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/target.sh ]; then
     k8kreator-msg-error "Cluster target not found ${K8KREATOR_TARGET}"
   fi
@@ -150,7 +168,7 @@ k8kreator-cluster-create() {
 }
 
 k8kreator-cluster-delete() {
-  k8kreator-msg-debug "Running function k8kreator-cluster-delete (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-cluster-delete (target: ${K8KREATOR_TARGET})"
   if [ ! -f ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/target.sh ]; then
     k8kreator-msg-error "Cluster target not found ${K8KREATOR_TARGET}"
   fi
@@ -167,7 +185,7 @@ k8kreator-cluster-delete() {
 # =============================================================================
 
 k8kreator-addons-list() {
-  k8kreator-msg-debug "Running function k8kreator-addons-list (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-addons-list"
   k8kreator-check-deps "find"
   source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
   k8kreator-msg-info "Listing addons for target ${K8KREATOR_TARGET}:"
@@ -187,52 +205,75 @@ k8kreator-addons-list() {
 }
 
 k8kreator-addons-install() {
-  k8kreator-msg-debug "Running function k8kreator-addons-install $@ (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-addons-install $@"
   source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
+  # Overaly list with input args
+  if [ $# -ne 0 ]; then
+    addons=()
+    for addon_name in $@; do
+      addon_version=$(k8kreator-get-addon-version ${addon_name})
+      addons+=" ${addon_name}=${addon_version}"
+    done
+    K8KREATOR_ADDONS=(${addons})
+    k8kreator-msg-debug "Selected addons: ${K8KREATOR_ADDONS}"
+  fi
+  # Update selected addons
   for addon in ${K8KREATOR_ADDONS[@]}; do
     addon_name=${addon%%=*}
     addon_version=${addon##*=}
-    # parse for selected addons from input args
-    for selected in $@; do
-      case ${selected} in
-        "${addon_name}")
-          if [ ! -f ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh ]; then
-            k8kreator-msg-error "Addon not found ${addon_name}"
-          fi
-          source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
-          k8kreator-msg-info "Installing addon ${addon_name} ${addon_version}"
-          k8kreator-addons-install-${addon_name} ${addon_version} || k8kreator-msg-error "Installation failed"
-          ;;
-      esac
-    done
+    if [ ! -f ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh ]; then
+      k8kreator-msg-error "Addon not found ${addon_name}"
+    fi
+    source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
+    k8kreator-msg-info "Installing addon ${addon_name} ${addon_version}"
+    if ! k8kreator-addons-install-${addon_name} ${addon_version}; then
+      k8kreator-msg-error "Failed to install addon ${addon_name} (${addon_version})"
+    fi
   done
 }
 
 k8kreator-addons-update() {
-  k8kreator-msg-debug "Running function k8kreator-addons-update $@ (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-addons-update $@"
   source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
+  # Overaly list with input args
+  if [ $# -ne 0 ]; then
+    addons=()
+    for addon_name in $@; do
+      addon_version=$(k8kreator-get-addon-version ${addon_name})
+      addons+=" ${addon_name}=${addon_version}"
+    done
+    K8KREATOR_ADDONS=(${addons})
+    k8kreator-msg-debug "Selected addons: ${K8KREATOR_ADDONS}"
+  fi
+  # Update selected addons
   for addon in ${K8KREATOR_ADDONS[@]}; do
     addon_name=${addon%%=*}
     addon_version=${addon##*=}
-    # parse for selected addons from input args
-    for selected in $@; do
-      case ${selected} in
-        "${addon_name}")
-          if [ ! -f ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh ]; then
-            k8kreator-msg-error "Addon not found ${addon_name}"
-          fi
-          source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
-          k8kreator-msg-info "Updating addon ${addon_name} ${addon_version}"
-          k8kreator-addons-update-${addon_name} ${addon_version} || k8kreator-msg-error "Update failed"
-          ;;
-      esac
-    done
+    if [ ! -f ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh ]; then
+      k8kreator-msg-error "Addon not found ${addon_name}"
+    fi
+    source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
+    k8kreator-msg-info "Updating addon ${addon_name} ${addon_version}"
+    if ! k8kreator-addons-update-${addon_name} ${addon_version}; then
+      k8kreator-msg-error "Failed to update addon ${addon_name} (${addon_version})"
+    fi
   done
 }
 
 k8kreator-addons-uninstall() {
-  k8kreator-msg-debug "Running function k8kreator-addons-uninstall $@ (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-addons-uninstall $@"
   source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
+  # Overaly list with input args
+  if [ $# -ne 0 ]; then
+    addons=()
+    for addon_name in $@; do
+      addon_version=$(k8kreator-get-addon-version ${addon_name})
+      addons+=" ${addon_name}=${addon_version}"
+    done
+    K8KREATOR_ADDONS=(${addons})
+    k8kreator-msg-debug "Selected addons: ${K8KREATOR_ADDONS}"
+  fi
+  # Update selected addons
   for addon in ${K8KREATOR_ADDONS[@]}; do
     addon_name=${addon%%=*}
     addon_version=${addon##*=}
@@ -241,7 +282,9 @@ k8kreator-addons-uninstall() {
     fi
     source ${K8KREATOR_SRCDIR}/addons/${addon_name}.sh
     k8kreator-msg-info "Uninstalling addon ${addon_name} ${addon_version}"
-    k8kreator-addons-uninstall-${addon_name} ${addon_version} || k8kreator-msg-error "Uninstall failed"
+    if ! k8kreator-addons-uninstall-${addon_name} ${addon_version}; then
+      k8kreator-msg-error "Failed to uninstall addon ${addon_name} (${addon_version})"
+    fi
   done
 }
 
@@ -250,7 +293,7 @@ k8kreator-addons-uninstall() {
 # =============================================================================
 
 k8kreator-tools-list() {
-  k8kreator-msg-debug "Running function k8kreator-tools-list (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-tools-list"
   k8kreator-check-deps "find"
   source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
   k8kreator-msg-info "Listing tools for target ${K8KREATOR_TARGET}:"
@@ -271,67 +314,77 @@ k8kreator-tools-list() {
 }
 
 k8kreator-tools-install() {
-  k8kreator-msg-debug "Running function k8kreator-tools-install $@ (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-tools-install $@"
   source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
+  # Overaly list with input args
+  if [ $# -ne 0 ]; then
+    tools=()
+    for tool_name in $@; do
+      tool_version=$(k8kreator-get-tool-version ${tool_name})
+      tools+=" ${tool_name}=${tool_version}"
+    done
+    K8KREATOR_TOOLS=(${tools})
+  fi
+  # Install selected tools
   for tool in ${K8KREATOR_TOOLS[@]}; do
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
-    # parse for selected tool from input args
-    for selected in $@; do
-      case ${selected} in
-        "${tool_name}")
-          if [ ! -f ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh ]; then
-            k8kreator-msg-error "Addon not found ${tool_name}"
-          fi
-          source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
-          k8kreator-msg-info "Installing tool ${tool_name} ${tool_version}"
-          k8kreator-tools-install-${tool_name} ${tool_version} || k8kreator-msg-error "Install failed"
-          ;;
-      esac
-    done
+    if [ ! -f ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh ]; then
+      k8kreator-msg-error "Addon not found ${tool_name}"
+    fi
+    source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
+    k8kreator-msg-info "Installing tool ${tool_name} ${tool_version}"
+    k8kreator-tools-install-${tool_name} ${tool_version} || k8kreator-msg-error "Install failed"
   done
 }
 
 k8kreator-tools-select() {
-  k8kreator-msg-debug "Running function k8kreator-tools-select $@ (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-tools-select $@"
   source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
+  # Overaly list with input args
+  if [ $# -ne 0 ]; then
+    tools=()
+    for tool_name in $@; do
+      tool_version=$(k8kreator-get-tool-version ${tool_name})
+      tools+=("${tool_name}=${tool_version}")
+    done
+    K8KREATOR_TOOLS=(${tools})
+  fi
+  # Update selected tools
   for tool in ${K8KREATOR_TOOLS[@]}; do
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
-    # parse for selected tool from input args
-    for selected in $@; do
-      case ${selected} in
-        "${tool_name}")
-          if [ ! -f ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh ]; then
-            k8kreator-msg-error "Addon not found ${tool_name}"
-          fi
-          source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
-          k8kreator-msg-info "Selecting tool ${tool_name} ${tool_version}"
-          k8kreator-tools-select-${tool_name} ${tool_version} || k8kreator-msg-error "Update failed"
-          ;;
-      esac
-    done
+    if [ ! -f ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh ]; then
+      k8kreator-msg-error "Addon not found ${tool_name}"
+    fi
+    source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
+    k8kreator-msg-info "Selecting tool ${tool_name} ${tool_version}"
+    k8kreator-tools-select-${tool_name} ${tool_version} || k8kreator-msg-error "Update failed"
   done
 }
 
 k8kreator-tools-uninstall() {
-  k8kreator-msg-debug "Running function k8kreator-tools-uninstall $@ (${K8KREATOR_TARGET})"
+  k8kreator-msg-debug "Running function k8kreator-tools-uninstall $@"
   source ${K8KREATOR_SRCDIR}/targets/${K8KREATOR_TARGET}/env.sh
+  # Overaly list with input args
+  if [ $# -ne 0 ]; then
+    tools=()
+    for tool_name in $@; do
+      tool_version=$(k8kreator-get-tool-version ${tool_name})
+      tools+=("${tool_name}=${tool_version}")
+    done
+    K8KREATOR_TOOLS=(${tools})
+  fi
+  # Uninstall selected tools
   for tool in ${K8KREATOR_TOOLS[@]}; do
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
-    # parse for selected tool from input args
-    for selected in $@; do
-      case ${selected} in
-        "${tool_name}")
-          if [ ! -f ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh ]; then
-            k8kreator-msg-error "Addon not found ${tool_name}"
-          fi
-          source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
-          k8kreator-msg-info "Uninstalling tool ${tool_name} ${tool_version}"
-          k8kreator-tools-uninstall-${tool_name} ${tool_version} || k8kreator-msg-error "Uninstall failed"
-      esac
-    done
+    if [ ! -f ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh ]; then
+      k8kreator-msg-error "Addon not found ${tool_name}"
+    fi
+    source ${K8KREATOR_SRCDIR}/tools/${tool_name}.sh
+    k8kreator-msg-info "Uninstalling tool ${tool_name} ${tool_version}"
+    k8kreator-tools-uninstall-${tool_name} ${tool_version} || k8kreator-msg-error "Uninstall failed"
   done
 }
 
