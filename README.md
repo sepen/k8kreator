@@ -15,6 +15,40 @@ To install **k8kreator** paste that in a macOS Terminal or Linux shell prompt:
 $ curl -fsSL https://raw.githubusercontent.com/sepen/k8kreator/main/k8kreator | bash -s self install
 ```
 
+## Usage
+```
+Usage:
+  k8kreator [command]
+
+Available Commands:
+  self      Install or update k8kreator itself
+  cluster   List, create or delete clusters (it will use K8KREATOR_TARGET)
+  addons    Install, update, list or uninstall addons for the cluster target
+  tools     Install, update, list or uninstall tools for the cluster target
+  version   Print k8kreator version information
+  env       Print k8kreator environment variables
+  help      Print help information
+
+Flags:
+      --debug        Enable debug messages
+      --nocolor      Disable colored output mmessages
+      --version      Print k8kreator version information
+      --env          Print k8kreator environment variables
+  -h, --help         Print help information
+  -t, --target id    Set the cluster target. Overrides K8KREATOR_TARGET from environment variable
+
+Environment variables:
+
+| Name               | Description                                                              |
+|--------------------|--------------------------------------------------------------------------|
+| K8KREATOR_DEBUG    | Indicate whether or not k8kreator is running in Debug mode               |
+| K8KREATOR_HOME     | Alternative path for k8kreator's base directory (default ~/.k8kreator)   |
+| K8KREATOR_TARGET   | Active cluster target. Run 'k8kreator cluster list' to get all available |
+| K8KREATOR_NOCOLOR  | Disable colored output messages. Set K8KREATOR_NOCOLOR=1 to disable      |
+| K8KREATOR_BINDIR   | Alternative path for binary files (default ~/.k8kreator/bin)             |
+| K8KREATOR_SRCDIR   | Alternative path for source directory (default ~/.k8kreator/src)         |
+| K8KREATOR_TMPDIR   | Alternative path for temporary files (default ~/.k8kreator/tmp)          |
+```
 
 ## Overview
 
