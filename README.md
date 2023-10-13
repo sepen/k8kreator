@@ -15,7 +15,8 @@ To install **k8kreator** paste that in a macOS Terminal or Linux shell prompt:
 $ curl -fsSL https://raw.githubusercontent.com/sepen/k8kreator/main/k8kreator | bash -s self install
 ```
 
-## Usage
+## Usage
+
 ```
 Usage:
   k8kreator [command]
