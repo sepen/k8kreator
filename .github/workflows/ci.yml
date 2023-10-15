@@ -13,6 +13,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# Environment variables
+env:
+  K8KREATOR_DEBUG: 1
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "test"
@@ -25,9 +29,26 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Test one-liner installation method
-      - name: Test installation
+      # CI Tests
+      - name: Test self-install
         run: |
           curl -fsSL https://raw.githubusercontent.com/sepen/k8kreator/main/k8kreator | bash -s self install
           export PATH=$HOME/.k8kreator/bin:$PATH
           k8kreator version
+
+      - name: Test self-update
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          k8kreator self-update
+
+      - name: Test cluster-create
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          k8kreator cluster create -t all.kind.local
+
+      - name: Test addons-install
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          k8kreator addons install -t all.kind.local
+      
+          
