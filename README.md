@@ -1,4 +1,4 @@
-<img src="https://github.com/sepen/k8kreator/assets/11802175/79f55123-f1ee-49c5-9d96-068c055584d5" width=200>
+<img src="https://github.com/sepen/k8kreator/assets/11802175/79f55123-f1ee-49c5-9d96-068c055584d5" width="200" text-align="center">
 
 # `k8kreator`
 
@@ -17,6 +17,12 @@ To install **k8kreator** paste that in a macOS Terminal or Linux shell prompt:
 ```
 $ curl -fsSL https://raw.githubusercontent.com/sepen/k8kreator/main/k8kreator | bash -s self install
 ```
+
+The one-liner command from above installs **k8kreator** to its default, `$HOME/.k8kreator` and will place some files under that prefix, so you'll need to set your PATH like this `export PATH=$HOME/.k8kreator/bin:$PATH`. \
+The installation explains what it will do, and you will see all that information. Consider adding this line to your _~/.bashrc_ or _~/.bash_profile_ or make sure to export this _PATH_ before running **k8kreator**. The installation explains what it will do. \
+The one-liner installation method found on **k8kreator** uses Bash. Notably, zsh, fish, tcsh and csh will not work.
+
+---
 
 ## Usage
 
