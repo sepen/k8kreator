@@ -45,6 +45,8 @@ jobs:
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
           k8kreator cluster create -t all.kind.local
+          export KUBECONFIG=$HOME/.k8kreator/kubeconfig
+          kubectl version
       - name: Test addons-install
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
@@ -52,6 +54,7 @@ jobs:
       - name: Test pods, services and ingresses
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
+          export KUBECONFIG=$HOME/.k8kreator/kubeconfig
           kubectl get pod -A
           kubectl get svc -A
           kubectl get ing -A
@@ -69,6 +72,8 @@ jobs:
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
           k8kreator cluster create -t all.k3d.local
+          export KUBECONFIG=$HOME/.k8kreator/kubeconfig
+          kubectl version
       - name: Test addons-install
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
@@ -76,6 +81,7 @@ jobs:
       - name: Test pods, services and ingresses
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
+          export KUBECONFIG=$HOME/.k8kreator/kubeconfig
           kubectl get pod -A
           kubectl get svc -A
           kubectl get ing -A
@@ -93,6 +99,8 @@ jobs:
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
           k8kreator cluster create -t all.minikube.local
+          export KUBECONFIG=$HOME/.k8kreator/kubeconfig
+          kubectl version
       - name: Test addons-install
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
@@ -100,6 +108,7 @@ jobs:
       - name: Test pods, services and ingresses
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
+          export KUBECONFIG=$HOME/.k8kreator/kubeconfig
           kubectl get pod -A
           kubectl get svc -A
           kubectl get ing -A
