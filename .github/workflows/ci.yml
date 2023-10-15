@@ -58,7 +58,7 @@ jobs:
           kubectl get pod -A
           kubectl get svc -A
           kubectl get ing -A
-      - name: Test cluster-uninstall
+      - name: Test addons-uninstall
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
           k8kreator addons uninstall -t all.kind.local
@@ -85,7 +85,7 @@ jobs:
           kubectl get pod -A
           kubectl get svc -A
           kubectl get ing -A
-      - name: Test cluster-uninstall
+      - name: Test addons-uninstall
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
           k8kreator addons uninstall -t all.k3d.local
@@ -112,7 +112,7 @@ jobs:
           kubectl get pod -A
           kubectl get svc -A
           kubectl get ing -A
-      - name: Test cluster-uninstall
+      - name: Test addons-uninstall
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
           k8kreator addons uninstall -t all.minikube.local
