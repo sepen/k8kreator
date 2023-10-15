@@ -29,26 +29,85 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # CI Tests
+      # Installation Tests
       - name: Test self-install
         run: |
           curl -fsSL https://raw.githubusercontent.com/sepen/k8kreator/main/k8kreator | bash -s self install
           export PATH=$HOME/.k8kreator/bin:$PATH
           k8kreator version
-
       - name: Test self-update
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
           k8kreator self-update
 
+      # all.kind.local
       - name: Test cluster-create
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
           k8kreator cluster create -t all.kind.local
-
       - name: Test addons-install
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
           k8kreator addons install -t all.kind.local
-      
+      - name: Test pods, services and ingresses
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          kubectl get pod -A
+          kubectl get svc -A
+          kubectl get ing -A
+      - name: Test cluster-uninstall
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          k8kreator addons uninstall -t all.kind.local
+      - name: Test cluster-delete
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          k8kreator cluster delete -t all.kind.local
           
+      # all.k3d.local
+      - name: Test cluster-create
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          k8kreator cluster create -t all.k3d.local
+      - name: Test addons-install
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          k8kreator addons install -t all.k3d.local
+      - name: Test pods, services and ingresses
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          kubectl get pod -A
+          kubectl get svc -A
+          kubectl get ing -A
+      - name: Test cluster-uninstall
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          k8kreator addons uninstall -t all.k3d.local
+      - name: Test cluster-delete
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          k8kreator cluster delete -t all.k3d.local
+
+      # all.minikube.local
+      - name: Test cluster-create
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          k8kreator cluster create -t all.minikube.local
+      - name: Test addons-install
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          k8kreator addons install -t all.minikube.local
+      - name: Test pods, services and ingresses
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          kubectl get pod -A
+          kubectl get svc -A
+          kubectl get ing -A
+      - name: Test cluster-uninstall
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          k8kreator addons uninstall -t all.minikube.local
+      - name: Test cluster-delete
+        run: |
+          export PATH=$HOME/.k8kreator/bin:$PATH
+          k8kreator cluster delete -t all.minikube.local
