@@ -1,3 +1,5 @@
+<img src="https://github.com/sepen/k8kreator/assets/11802175/79f55123-f1ee-49c5-9d96-068c055584d5" width=200>
+
 # `k8kreator`
 
 Lightweight wrapper to manage Kubernetes clusters
@@ -7,6 +9,7 @@ Lightweight wrapper to manage Kubernetes clusters
 ![Code Size](https://img.shields.io/github/languages/code-size/sepen/k8kreator)
 ![Proudly Written in Bash](https://img.shields.io/badge/written%20in-bash-ff69b4)
 
+---
 
 ## Installation
 
@@ -51,6 +54,8 @@ Environment variables:
 | K8KREATOR_TMPDIR   | Alternative path for temporary files (default ~/.k8kreator/tmp)          |
 ```
 
+---
+
 ## Overview
 
 The idea behind **k8kreator** is to be able to run clusters with different Kubernetes engines and have a homogeneous way to install and maintain cluster addons. It was primarily designed for testing Kubernetes itself, but may be used for local development or CI (you can use it in production but it's not what it's designed for, so do it at your own risk).
@@ -85,6 +90,7 @@ The cluster _addons_ that come in the default targets are the following:
 
 In addition to targets above you can add your own custom _target_. To create it you can use _default_ targets as a template and remove or add addons as needed.
 
+---
 
 ## Important Notes
 
