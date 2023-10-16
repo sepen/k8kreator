@@ -1,0 +1,259 @@
+# Name:    loki
+# Website: https://grafana.com/docs/loki/latest/
+# Chart:   https://github.com/grafana/loki/blob/main/production/helm/loki
+# Values:  https://github.com/grafana/loki/blob/main/production/helm/loki/values.yaml
+
+loki:
+  # Should authentication be enabled
+  auth_enabled: true
+
+enterprise:
+  enabled: false
+
+serviceAccount:
+  # -- Specifies whether a ServiceAccount should be created
+  create: true
+
+
+
+# Monitoring section determines which monitoring features to enable
+monitoring:
+  # Dashboards for monitoring Loki
+  dashboards:
+    # -- If enabled, create configmap with dashboards for monitoring Loki
+    enabled: true
+    # -- Alternative namespace to create dashboards ConfigMap in
+    namespace: null
+    # -- Additional annotations for the dashboards ConfigMap
+    annotations: {}
+    # -- Labels for the dashboards ConfigMap
+    labels:
+      grafana_dashboard: "1"
+  # Recording rules for monitoring Loki, required for some dashboards
+  rules:
+    # -- If enabled, create PrometheusRule resource with Loki recording rules
+    enabled: true
+    # -- Include alerting rules
+    alerting: true
+    # -- Alternative namespace to create PrometheusRule resources in
+    namespace: null
+    # -- Additional annotations for the rules PrometheusRule resource
+    annotations: {}
+    # -- Additional labels for the rules PrometheusRule resource
+    labels: {}
+    # -- Additional labels for PrometheusRule alerts
+    additionalRuleLabels: {}
+    # -- Additional groups to add to the rules file
+    additionalGroups: []
+    # - name: additional-loki-rules
+    #   rules:
+    #     - record: job:loki_request_duration_seconds_bucket:sum_rate
+    #       expr: sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, job)
+    #     - record: job_route:loki_request_duration_seconds_bucket:sum_rate
+    #       expr: sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, job, route)
+    #     - record: node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate
+    #       expr: sum(rate(container_cpu_usage_seconds_total[1m])) by (node, namespace, pod, container)
+  # ServiceMonitor configuration
+  serviceMonitor:
+    # -- If enabled, ServiceMonitor resources for Prometheus Operator are created
+    enabled: true
+    # -- Namespace selector for ServiceMonitor resources
+    namespaceSelector: {}
+    # -- ServiceMonitor annotations
+    annotations: {}
+    # -- Additional ServiceMonitor labels
+    labels: {}
+    # -- ServiceMonitor scrape interval
+    # Default is 15s because included recording rules use a 1m rate, and scrape interval needs to be at
+    # least 1/4 rate interval.
+    interval: 15s
+    # -- ServiceMonitor scrape timeout in Go duration format (e.g. 15s)
+    scrapeTimeout: null
+    # -- ServiceMonitor relabel configs to apply to samples before scraping
+    # https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    relabelings: []
+    # -- ServiceMonitor metric relabel configs to apply to samples before ingestion
+    # https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#endpoint
+    metricRelabelings: []
+    # -- ServiceMonitor will use http by default, but you can pick https as well
+    scheme: http
+    # -- ServiceMonitor will use these tlsConfig settings to make the health check requests
+    tlsConfig: null
+    # -- If defined, will create a MetricsInstance for the Grafana Agent Operator.
+    metricsInstance:
+      # -- If enabled, MetricsInstance resources for Grafana Agent Operator are created
+      enabled: true
+      # -- MetricsInstance annotations
+      annotations: {}
+      # -- Additional MetricsInstance labels
+      labels: {}
+      # -- If defined a MetricsInstance will be created to remote write metrics.
+      remoteWrite: null
+  # Self monitoring determines whether Loki should scrape its own logs.
+  # This feature currently relies on the Grafana Agent Operator being installed,
+  # which is installed by default using the grafana-agent-operator sub-chart.
+  # It will create custom resources for GrafanaAgent, LogsInstance, and PodLogs to configure
+  # scrape configs to scrape its own logs with the labels expected by the included dashboards.
+  selfMonitoring:
+    enabled: true
+    # -- Tenant to use for self monitoring
+    tenant:
+      # -- Name of the tenant
+      name: "self-monitoring"
+      # -- Namespace to create additional tenant token secret in. Useful if your Grafana instance
+      # is in a separate namespace. Token will still be created in the canary namespace.
+      secretNamespace: "{{ .Release.Namespace }}"
+    # Grafana Agent configuration
+    grafanaAgent:
+      # -- Controls whether to install the Grafana Agent Operator and its CRDs.
+      # Note that helm will not install CRDs if this flag is enabled during an upgrade.
+      # In that case install the CRDs manually from https://github.com/grafana/agent/tree/main/production/operator/crds
+      installOperator: true
+      # -- Grafana Agent annotations
+      annotations: {}
+      # -- Additional Grafana Agent labels
+      labels: {}
+      # -- Enable the config read api on port 8080 of the agent
+      enableConfigReadAPI: false
+      # -- The name of the PriorityClass for GrafanaAgent pods
+      priorityClassName: null
+      # -- Tolerations for GrafanaAgent pods
+      tolerations: []
+    # PodLogs configuration
+    podLogs:
+      # -- PodLogs version
+      apiVersion: monitoring.grafana.com/v1alpha1
+      # -- PodLogs annotations
+      annotations: {}
+      # -- Additional PodLogs labels
+      labels: {}
+      # -- PodLogs relabel configs to apply to samples before scraping
+      # https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+      relabelings: []
+    # LogsInstance configuration
+    logsInstance:
+      # -- LogsInstance annotations
+      annotations: {}
+      # -- Additional LogsInstance labels
+      labels: {}
+      # -- Additional clients for remote write
+      clients: null
+  # The Loki canary pushes logs to and queries from this loki installation to test
+  # that it's working correctly
+  lokiCanary:
+    enabled: true
+    # -- The name of the label to look for at loki when doing the checks.
+    labelname: pod
+    # -- Additional annotations for the `loki-canary` Daemonset
+    annotations: {}
+    # -- Additional labels for each `loki-canary` pod
+    podLabels: {}
+    service:
+      # -- Annotations for loki-canary Service
+      annotations: {}
+      # -- Additional labels for loki-canary Service
+      labels: {}
+    # -- Additional CLI arguments for the `loki-canary' command
+    extraArgs: []
+    # -- Environment variables to add to the canary pods
+    extraEnv: []
+    # -- Environment variables from secrets or configmaps to add to the canary pods
+    extraEnvFrom: []
+    # -- Resource requests and limits for the canary
+    resources: {}
+    # -- DNS config for canary pods
+    dnsConfig: {}
+    # -- Node selector for canary pods
+    nodeSelector: {}
+    # -- Tolerations for canary pods
+    tolerations: []
+    # -- The name of the PriorityClass for loki-canary pods
+    priorityClassName: null
+    # -- Image to use for loki canary
+    image:
+      # -- The Docker registry
+      registry: docker.io
+      # -- Docker image repository
+      repository: grafana/loki-canary
+      # -- Overrides the image tag whose default is the chart's appVersion
+      tag: null
+      # -- Overrides the image tag with an image digest
+      digest: null
+      # -- Docker image pull policy
+      pullPolicy: IfNotPresent
+    # -- Update strategy for the `loki-canary` Daemonset pods
+    updateStrategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
+# Configuration for the write pod(s)
+write:
+  # -- Number of replicas for the write
+  replicas: 1
+  autoscaling:
+    # -- Enable autoscaling for the write.
+    enabled: false
+
+tableManager:
+  enabled: false
+
+# Configuration for the backend pod(s)
+backend:
+  # -- Number of replicas for the backend
+  replicas: 1
+  autoscaling:
+    # -- Enable autoscaling for the backend.
+    enabled: false                                    
+
+  persistence:
+    # -- Enable volume claims in pod spec
+    volumeClaimsEnabled: true
+    # -- Parameters used for the `data` volume when volumeClaimEnabled if false
+    dataVolumeParameters:
+      emptyDir: {}
+    # -- Enable StatefulSetAutoDeletePVC feature
+    enableStatefulSetAutoDeletePVC: true
+    # -- Size of persistent disk
+    size: 1Gi
+
+# Configuration for the single binary node(s)
+singleBinary:
+  # -- Number of replicas for the single binary
+  replicas: 1
+  autoscaling:
+    # -- Enable autoscaling
+    enabled: false
+  persistence:
+    # -- Enable StatefulSetAutoDeletePVC feature
+    enableStatefulSetAutoDeletePVC: true
+    # -- Enable persistent disk
+    enabled: true
+    # -- Size of persistent disk
+    size: 1Gi
+
+# Use either this ingress or the gateway, but not both at once.
+# If you enable this, make sure to disable the gateway.
+# You'll need to supply authn configuration for your ingress controller.
+ingress:
+  enabled: true
+  ingressClassName: "nginx"
+  hosts:
+    - loki
+
+gateway:
+  enabled: false
+
+networkPolicy:
+  enabled: false
+
+tracing:
+  jaegerAgentHost: ""
+
+minio:
+  enabled: false
+
+sidecar:
+  rules:
+    enabled: false
+
+# End of file

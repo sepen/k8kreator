@@ -12,6 +12,7 @@ export K8KREATOR_ADDONS=(
     "prometheus=25.1.0"
     "grafana=6.60.6"
     "promtail=6.15.2"
+    "loki=5.31.0"
 )
 
 # End of file
