@@ -1,6 +1,6 @@
 # Name:    promtail
 # Website: https://grafana.com/docs/loki/latest/send-data/promtail/
-# Charts:  https://github.com/grafana/helm-charts/tree/main/charts/promtail
+# Chart:   https://github.com/grafana/helm-charts/tree/main/charts/promtail
 # Values:  https://github.com/grafana/helm-charts/tree/main/charts/promtail/values.yaml
 
 daemonset:

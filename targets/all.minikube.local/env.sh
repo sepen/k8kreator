@@ -10,6 +10,7 @@ export K8KREATOR_ADDONS=(
     "kubewatch=3.3.10"
     "jenkins=4.6.6"
     "prometheus=25.1.0"
+    "grafana=6.60.6"
     "promtail=6.15.2"
 )
 
