@@ -95,7 +95,7 @@ At this moment **k8kreator** supports the following _Cluster Addons_:
 | [kubernetes-dashboard](https://github.com/kubernetes/dashboard) | Web-based UI that allows administrators to perform basic operating tasks and review cluster events |
 | [kubewatch](https://github.com/robusta-dev/kubewatch) | Kubernetes watcher that publishes notifications to Slack/hipchat/mattermost/flock channels |
 | [prometheus](https://prometheus.io/) | Systems monitoring and alerting toolkit with an active ecosystem. It is the only system directly supported by Kubernetes and the de facto standard across the cloud native ecosystem |
-| [promtail](https://grafana.com/docs/loki/latest/send-data/promtail/) | Aan agent which ships the contents of local logs to a private Grafana Loki instance or Grafana Cloud |
+| [promtail](https://grafana.com/docs/loki/latest/send-data/promtail/) | An agent which ships the contents of local logs to a private Grafana Loki instance or Grafana Cloud |
 | [loki](https://grafana.com/docs/loki/latest/) (WIP) | Horizontally-scalable, highly-available, multi-tenant log aggregation system inspired by Prometheus |
 | [grafana](https://grafana.com/) | Query, visualize, alert on, and explore your metrics, logs, and traces |
 | [jenkins](https://www.jenkins.io/) | Continuous integration/continuous delivery and deployment (CI/CD) automation software DevOps tool |
