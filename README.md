@@ -9,7 +9,17 @@ Lightweight wrapper to manage Kubernetes clusters
 ![Code Size](https://img.shields.io/github/languages/code-size/sepen/k8kreator)
 ![Proudly Written in Bash](https://img.shields.io/badge/written%20in-bash-ff69b4)
 
----
+
+## Features
+
+The idea behind **k8kreator** is to be able to run clusters with different Kubernetes engines and have a homogeneous way to install and maintain cluster addons. It was primarily designed for testing Kubernetes itself, but may be used for local development or CI (you can use it in production but it's not what it's designed for, so do it at your own risk).
+
+* Ease of creating and maintaining local clusters with different engines: minikube, kind and k3d
+* Addons for easily installed Kubernetes applications
+* Ability to test the latest versions of Kubernetes and installed Kubernetes applications
+* Cross-platform (Linux and macOS)
+* Automatic configuration of a load balancer
+
 
 ## Installation
 
@@ -22,7 +32,6 @@ The one-liner command from above installs **k8kreator** to its default, `$HOME/.
 The installation explains what it will do, and you will see all that information. Consider adding this line to your _~/.bashrc_ or _~/.bash_profile_ or make sure to export this _PATH_ before running **k8kreator**. The installation explains what it will do. \
 The one-liner installation method found on **k8kreator** uses Bash. Notably, zsh, fish, tcsh and csh will not work.
 
----
 
 ## Usage
 
@@ -60,43 +69,61 @@ Environment variables:
 | K8KREATOR_TMPDIR   | Alternative path for temporary files (default ~/.k8kreator/tmp)          |
 ```
 
----
 
-## Overview
+## Cluster Engines
 
-The idea behind **k8kreator** is to be able to run clusters with different Kubernetes engines and have a homogeneous way to install and maintain cluster addons. It was primarily designed for testing Kubernetes itself, but may be used for local development or CI (you can use it in production but it's not what it's designed for, so do it at your own risk).
+A _Cluster Engine_ is defined as a tool or set of tools used to create a Kubernetes Cluster.
 
-At this moment **k8kreator** supports the following Kubernetes engines:
-* [kind]. A tool for running local Kubernetes clusters using Docker container “nodes”.
-* [k3d]. A lightweight wrapper to run k3s (Rancher Lab's minimal Kubernetes distribution) in docker.
-* [minikube]. A tool for running a local Kubernetes cluster, focusing on making it easy to learn and develop for Kubernetes.
+At this moment **k8kreator** supports the following _Cluster Engines_:
 
-[kind]: https://kind.sigs.k8s.io/
-[k3d]: https://k3d.io/
-[minikube]: https://minikube.sigs.k8s.io/
+| Cluster Engine | Description |
+|----------------|-------------|
+| [kind](https://kind.sigs.k8s.io/) | A tool for running local Kubernetes clusters using Docker container “nodes” |
+| [k3d](https://k3d.io/) | A lightweight wrapper to run k3s (Rancher Lab's minimal Kubernetes distribution) in docker |
+| [minikube](https://minikube.sigs.k8s.io/) | A tool for running a local Kubernetes cluster, focusing on making it easy to learn and develop for Kubernetes |
 
-Each cluster in **k8kreator** can be identified as a _target_: `<name>.<engine>.<environment>`.
-Each _target_ has its own configuration for the Kubernetes engine and a set of _addons_ to populate the cluster. These _addons_ may vary from one _target_ to another and may have different configuration depending on the Kubernetes engine.
 
-**k8kreator** provides the following _default_ targets:
-* `default.kind.local`
-* `default.k3d.local`
-* `default.minukube.local`
+## Cluster Addons
 
-The _default_ targets help to have a cluster with a minimum base to be used as a starting point. They consist of only two nodes: a control-plane and a worker.
+_Cluster Addons_ are what we commonly said as Kubernetes Applications and include both the necessary manifests for Kubernetes as well as any external tools or applications necessary for them to work correctly.
 
-The cluster _addons_ that come in the default targets are the following:
-* [metrics-server]. It collects resource metrics from Kubelets and exposes them in Kubernetes apiserver through Metrics API.
-* [metallb].  A load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols.
-* [ingress-nginx]. An Ingress controller for Kubernetes using Nginx as a reverse proxy and load balancer.
+At this moment **k8kreator** supports the following _Cluster Addons_:
 
-[metrics-server]: https://github.com/kubernetes-sigs/metrics-server/
-[metallb]: https://metallb.universe.tf/
-[ingress-nginx]: https://github.com/kubernetes/ingress-nginx/
+| Cluster Addon | Description |
+|---------------|-------------|
+| [metrics-server](https://github.com/kubernetes-sigs/metrics-server/) | It collects resource metrics from Kubelets and exposes them in Kubernetes apiserver through Metrics API |
+| [metallb](https://metallb.universe.tf/) | A load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols |
+| [ingress-nginx](https://github.com/kubernetes/ingress-nginx/) | An Ingress controller for Kubernetes using Nginx as a reverse proxy and load balancer |
+| [kubernetes-dashboard](https://github.com/kubernetes/dashboard) | Web-based UI that allows administrators to perform basic operating tasks and review cluster events |
+| [kubewatch](https://github.com/robusta-dev/kubewatch) | Kubernetes watcher that publishes notifications to Slack/hipchat/mattermost/flock channels |
+| [prometheus](https://prometheus.io/) | Systems monitoring and alerting toolkit with an active ecosystem. It is the only system directly supported by Kubernetes and the de facto standard across the cloud native ecosystem |
+| [promtail](https://grafana.com/docs/loki/latest/send-data/promtail/) | Aan agent which ships the contents of local logs to a private Grafana Loki instance or Grafana Cloud |
+| [loki](https://grafana.com/docs/loki/latest/) (WIP) | Horizontally-scalable, highly-available, multi-tenant log aggregation system inspired by Prometheus |
+| [grafana](https://grafana.com/) | Query, visualize, alert on, and explore your metrics, logs, and traces |
+| [jenkins](https://www.jenkins.io/) | Continuous integration/continuous delivery and deployment (CI/CD) automation software DevOps tool |
 
-In addition to targets above you can add your own custom _target_. To create it you can use _default_ targets as a template and remove or add addons as needed.
 
----
+## Cluster Targets
+
+Each different cluster in **k8kreator** can be identified as a _Cluster Target_ and has the following nomenclature: `<name>.<engine>.<environment>`.
+
+Each _Cluster Target_ has its own configuration for the _Cluster Engine_ and a set of _Cluster Addons_ to populate the cluster. These _Cluster Addons_ may vary from one _Cluster Target_ to another and may have different configuration depending on the _Cluster Engine_ to use.
+
+At this moment **k8kreator** provides the following _Cluster Targets_:
+
+| Cluster Target | Cluster Addons |
+|----------------|----------------|
+| [default.kind.local](targets/default.kind.local) | `metrics-server` `metallb` `ingress-nginx` |
+| [default.k3d.local](targets/default.k3d.local) | `metrics-server` `metallb` `ingress-nginx` |
+| [default.minukube.local](targets/default.minikube.local) | `metrics-server` `metallb` `ingress-nginx` |
+| [all.kind.local](targets/all.kind.local) | `metrics-server` `metallb` `ingress-nginx` `kubernetes-dashboard` `kubewatch` `prometheus` `promtail` `grafana` `jenkins` |
+| [all.k3d.local](targets/all.k3d.local) | `metrics-server` `metallb` `ingress-nginx` `kubernetes-dashboard` `kubewatch` `prometheus` `promtail` `grafana` `jenkins` |
+| [all.minikube.local](targets/all.minikube.local) | `metrics-server` `metallb` `ingress-nginx` `kubernetes-dashboard` `kubewatch` `prometheus` `promtail` `grafana` `jenkins` |
+* Targets with prefix `default` help to have a cluster with a minimum base to be used as a starting point.
+* Targets with prefix `all` have all addons available.
+* All that targets from above consist of only two nodes: a control-plane and a worker.
+* In addition to targets above you can add your own custom _target_. To create it you can use above targets as a template and remove or add addons as needed.
+
 
 ## Important Notes
 
