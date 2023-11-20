@@ -12,8 +12,6 @@ Lightweight wrapper to manage Kubernetes clusters
 
 ## Features
 
-The idea behind **k8kreator** is to be able to run clusters with different Kubernetes engines and have a homogeneous way to install and maintain cluster addons. It was primarily designed for testing Kubernetes itself, but may be used for local development or CI (you can use it in production but it's not what it's designed for, so do it at your own risk).
-
 * Ease of creating and maintaining local clusters with different engines: minikube, kind and k3d
 * Addons for easily installed Kubernetes applications
 * Ability to test the latest versions of Kubernetes and installed Kubernetes applications
@@ -126,6 +124,8 @@ At this moment **k8kreator** provides the following _Cluster Targets_:
 
 
 ## Important Notes
+
+The idea behind **k8kreator** is to be able to run clusters with different Kubernetes engines and have a homogeneous way to install and maintain cluster addons. It was primarily designed for testing Kubernetes itself, but may be used for local development or CI (you can use it in production but it's not what it's designed for, so do it at your own risk).
 
 With Docker on _Linux_, you can send traffic directly to the loadbalancer’s external IP if the IP space is within the docker IP space.
 
