@@ -9,7 +9,7 @@ Lightweight wrapper to manage Kubernetes clusters
 ![Code Size](https://img.shields.io/github/languages/code-size/sepen/k8kreator)
 ![Proudly Written in Bash](https://img.shields.io/badge/written%20in-bash-ff69b4)
 
-<img src="https://user-images.githubusercontent.com/11802175/284404560-3d635480-c3f4-4521-ae0d-b4fe074bc0b1.gif" text-align="center">
+<img src="https://user-images.githubusercontent.com/11802175/284404560-3d635480-c3f4-4521-ae0d-b4fe074bc0b1.gif" width="80%" text-align="center">
 
 
 ## Features
