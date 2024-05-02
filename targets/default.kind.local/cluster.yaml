@@ -5,18 +5,29 @@ apiVersion: kind.x-k8s.io/v1alpha4
 
 name: default.kind.local
 
+networking:
+  # WARNING: It is _strongly_ recommended that you keep this the default
+  # (127.0.0.1) for security reasons. However it is possible to change this.
+  apiServerAddress: "127.0.0.1"
+  # By default the API server listens on a random open port.
+  # You may choose a specific port but probably don't need to in most cases.
+  # Using a random port makes it easier to spin up multiple clusters.
+  apiServerPort: 6443
+
 nodes:
 
 - role: control-plane
   # https://hub.docker.com/r/kindest/node/tags
-  image: kindest/node:v1.28.0@sha256:9f3ff58f19dcf1a0611d11e8ac989fdb30a28f40f236f59f0bea31fb956ccf5c
+  #kindest/node:v1.29.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245 (multi-platform)
+  image: kindest/node:v1.19.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245
   labels:
     cluster-target: default.kind.local
     cluster-role: master
 
 - role: worker
   # https://hub.docker.com/r/kindest/node/tags
-  image: kindest/node:v1.28.0@sha256:9f3ff58f19dcf1a0611d11e8ac989fdb30a28f40f236f59f0bea31fb956ccf5c
+  #kindest/node:v1.29.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245 (multi-platform)
+  image: kindest/node:v1.19.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245
   labels:
     cluster-target: default.kind.local
     cluster-role: node
