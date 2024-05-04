@@ -183,9 +183,13 @@ k8kreator-cluster-create() {
   k8kreator-tools-select
   k8kreator-msg-info "Creating cluster ${K8KREATOR_TARGET}"
   k8kreator-cluster-create-target
-  k8kreator-msg-info "Created successfully!"
-  k8kreator-msg-info "IMPORTANT: To finish do you need to export KUBECONFIG as for example:"
-  k8kreator-msg-info "  export KUBECONFIG=\$HOME/.k8kreator/kubeconfig"
+  if [ $? -ne 0 ]; then
+    k8kreator-msg-error "Command failed!"
+  else
+    k8kreator-msg-info "Created successfully!"
+    k8kreator-msg-info "IMPORTANT: To finish do you need to export KUBECONFIG as for example:"
+    k8kreator-msg-info "  export KUBECONFIG=\$HOME/.k8kreator/kubeconfig"
+  fi
 }
 
 k8kreator-cluster-delete() {

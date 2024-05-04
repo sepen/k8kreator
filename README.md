@@ -132,3 +132,5 @@ The idea behind **k8kreator** is to be able to run clusters with different Kuber
 With Docker on _Linux_, you can send traffic directly to the loadbalancer’s external IP if the IP space is within the docker IP space.
 
 On _macOS_ and _Windows_, docker does not expose the docker network to the host. Because of this limitation, containers (including nodes) are only reachable from the host via port-forwards, however other containers/pods can reach other things running in docker including loadbalancers. You may want to check out the [Ingress Guide](https://kind.sigs.k8s.io/docs/user/ingress) as a cross-platform workaround. You can also expose pods and services using extra port mappings.
+
+Alternatively on _macOS_ you can try [docker-mac-net-connect](https://github.com/chipmk/docker-mac-net-connect)
