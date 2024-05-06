@@ -67,7 +67,7 @@ Flags:
       --version      Print k8kreator version information
       --env          Print k8kreator environment variables
   -h, --help         Print help information
-  -t, --target id    Set the cluster target. Overrides K8KREATOR_TARGET from environment variable
+  -t, --target ID    Set the cluster target. Overrides K8KREATOR_TARGET from environment variable
 
 Environment variables:
 
