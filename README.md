@@ -70,27 +70,23 @@ Environment variables:
 ```
 
 
-## Cluster Engines
+## Engines
 
-A _Cluster Engine_ is defined as a tool or set of tools used to create a Kubernetes Cluster.
+At this moment **k8kreator** supports the following _engines_:
 
-At this moment **k8kreator** supports the following _Cluster Engines_:
-
-| Cluster Engine | Description |
-|----------------|-------------|
+| Engine | Description |
+|--------|-------------|
 | [kind](https://kind.sigs.k8s.io/) | A tool for running local Kubernetes clusters using Docker container “nodes” |
 | [k3d](https://k3d.io/) | A lightweight wrapper to run k3s (Rancher Lab's minimal Kubernetes distribution) in docker |
 | [minikube](https://minikube.sigs.k8s.io/) | A tool for running a local Kubernetes cluster, focusing on making it easy to learn and develop for Kubernetes |
 
 
-## Cluster Addons
+## Addons
 
-_Cluster Addons_ are what we commonly said as Kubernetes Applications and include both the necessary manifests for Kubernetes as well as any external tools or applications necessary for them to work correctly.
+At this moment **k8kreator** supports the following _addons_:
 
-At this moment **k8kreator** supports the following _Cluster Addons_:
-
-| Cluster Addon | Description |
-|---------------|-------------|
+| Addon | Description |
+|-------|-------------|
 | [metrics-server](https://github.com/kubernetes-sigs/metrics-server/) | It collects resource metrics from Kubelets and exposes them in Kubernetes apiserver through Metrics API |
 | [metallb](https://metallb.universe.tf/) | A load-balancer implementation for bare metal Kubernetes clusters, using standard routing protocols |
 | [ingress-nginx](https://github.com/kubernetes/ingress-nginx/) | An Ingress controller for Kubernetes using Nginx as a reverse proxy and load balancer |
@@ -98,31 +94,20 @@ At this moment **k8kreator** supports the following _Cluster Addons_:
 | [kubewatch](https://github.com/robusta-dev/kubewatch) | Kubernetes watcher that publishes notifications to Slack/hipchat/mattermost/flock channels |
 | [prometheus](https://prometheus.io/) | Systems monitoring and alerting toolkit with an active ecosystem. It is the only system directly supported by Kubernetes and the de facto standard across the cloud native ecosystem |
 | [promtail](https://grafana.com/docs/loki/latest/send-data/promtail/) | An agent which ships the contents of local logs to a private Grafana Loki instance or Grafana Cloud |
-| [loki](https://grafana.com/docs/loki/latest/) (WIP) | Horizontally-scalable, highly-available, multi-tenant log aggregation system inspired by Prometheus |
+| [loki](https://grafana.com/docs/loki/latest/) | Horizontally-scalable, highly-available, multi-tenant log aggregation system inspired by Prometheus |
 | [grafana](https://grafana.com/) | Query, visualize, alert on, and explore your metrics, logs, and traces |
 | [jenkins](https://www.jenkins.io/) | Continuous integration/continuous delivery and deployment (CI/CD) automation software DevOps tool |
 
 
-## Cluster Targets
+## Targets
 
-Each different cluster in **k8kreator** can be identified as a _Cluster Target_ and has the following nomenclature: `<name>.<engine>.<environment>`.
+At this moment **k8kreator** provides the following _targets_:
 
-Each _Cluster Target_ has its own configuration for the _Cluster Engine_ and a set of _Cluster Addons_ to populate the cluster. These _Cluster Addons_ may vary from one _Cluster Target_ to another and may have different configuration depending on the _Cluster Engine_ to use.
-
-At this moment **k8kreator** provides the following _Cluster Targets_:
-
-| Cluster Target | Cluster Addons |
-|----------------|----------------|
-| [default.kind.local](targets/default.kind.local) | `metrics-server` `metallb` `ingress-nginx` |
-| [default.k3d.local](targets/default.k3d.local) | `metrics-server` `metallb` `ingress-nginx` |
-| [default.minukube.local](targets/default.minikube.local) | `metrics-server` `metallb` `ingress-nginx` |
-| [all.kind.local](targets/all.kind.local) | `metrics-server` `metallb` `ingress-nginx` `kubernetes-dashboard` `kubewatch` `prometheus` `promtail` `grafana` `jenkins` |
-| [all.k3d.local](targets/all.k3d.local) | `metrics-server` `metallb` `ingress-nginx` `kubernetes-dashboard` `kubewatch` `prometheus` `promtail` `grafana` `jenkins` |
-| [all.minikube.local](targets/all.minikube.local) | `metrics-server` `metallb` `ingress-nginx` `kubernetes-dashboard` `kubewatch` `prometheus` `promtail` `grafana` `jenkins` |
-* Targets with prefix `default` help to have a cluster with a minimum base to be used as a starting point.
-* Targets with prefix `all` have all addons available.
-* All that targets from above consist of only two nodes: a control-plane and a worker.
-* In addition to targets above you can add your own custom _target_. To create it you can use above targets as a template and remove or add addons as needed.
+| Target | Kubernetes | Tools |
+|--------|------------|-------|
+| [k8kreator.kind.local](targets/k8kreator.kind.local) | 1.29.2 | kind=0.22.0 kubectl=1.30.0 helm=3.14.0 |
+| [k8kreator.k3d.local](targets/k8kreator.k3d.local) | 1.27.4 | k3d=5.6.0 kubectl=1.28.1 helm=3.12.3 |
+| [k8kreator.minikube.local](targets/k8kreator.minikube.local) | 1.26.8 | minikube=1.31.2 kubectl=1.26.8 helm=3.12.3 |
 
 
 ## Important Notes
@@ -133,4 +118,4 @@ With Docker on _Linux_, you can send traffic directly to the loadbalancer’s ex
 
 On _macOS_ and _Windows_, docker does not expose the docker network to the host. Because of this limitation, containers (including nodes) are only reachable from the host via port-forwards, however other containers/pods can reach other things running in docker including loadbalancers. You may want to check out the [Ingress Guide](https://kind.sigs.k8s.io/docs/user/ingress) as a cross-platform workaround. You can also expose pods and services using extra port mappings.
 
-Alternatively on _macOS_ you can try [docker-mac-net-connect](https://github.com/chipmk/docker-mac-net-connect)
+On _macOS_ you can try [docker-mac-net-connect](https://github.com/chipmk/docker-mac-net-connect) to use a loadbalancer's external IP.

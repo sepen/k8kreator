@@ -438,7 +438,7 @@ export K8KREATOR_TOOLSDIR="${K8KREATOR_TOOLSSDIR:-${K8KREATOR_SRCDIR}/tools}"
 export K8KREATOR_ADDONSDIR="${K8KREATOR_ADDONSDIR:-${K8KREATOR_SRCDIR}/addons}"
 
 # Obtain target from environment or input command args, otherwise use defaults.
-export K8KREATOR_TARGET=${K8KREATOR_TARGET:-default.kind.local}
+export K8KREATOR_TARGET=${K8KREATOR_TARGET:-k8kreator.kind.local}
 
 # Check for args
 [ $# -eq 0 ] && k8kreator-print-help

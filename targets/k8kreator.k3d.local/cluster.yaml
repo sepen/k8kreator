@@ -4,7 +4,7 @@ kind: Simple
 apiVersion: k3d.io/v1alpha5
 
 metadata:
-  name: default.k3d.local
+  name: k8kreator.k3d.local
 
 servers: 1
 agents: 1

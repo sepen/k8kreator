@@ -3,7 +3,7 @@
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 
-name: default.kind.local
+name: k8kreator.kind.local
 
 networking:
   # WARNING: It is _strongly_ recommended that you keep this the default
@@ -21,13 +21,21 @@ nodes:
   #kindest/node:v1.29.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245 (multi-platform)
   image: kindest/node:v1.19.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245
   labels:
-    k8kreator-target: default.kind.local
+    k8kreator-target: k8kreator.kind.local
 
 - role: worker
   # https://hub.docker.com/r/kindest/node/tags
   #kindest/node:v1.29.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245 (multi-platform)
   image: kindest/node:v1.19.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245
   labels:
-    k8kreator-target: default.kind.local
+    k8kreator-target: k8kreator.kind.local
+
+- role: worker
+  # https://hub.docker.com/r/kindest/node/tags
+  #kindest/node:v1.29.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245 (multi-platform)
+  image: kindest/node:v1.19.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245
+  labels:
+    k8kreator-target: k8kreator.kind.local
+
 
 # End of file
