@@ -12,7 +12,6 @@ k8kreator-cluster-create-target() {
 }
 
 k8kreator-cluster-delete-target() {
-  local name=${K8KREATOR_TARGET}
   k8kreator-check-deps ${MINIKUBE_COMMAND}
   ${MINIKUBE_COMMAND} delete
 }

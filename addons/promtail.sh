@@ -15,7 +15,7 @@ k8kreator-addons-update-promtail() {
     --version ${addon_version} \
     --create-namespace --namespace monitoring \
     --install --atomic --cleanup-on-fail \
-    --values ${K8KREATOR_SRCDIR}/addons/promtail/values.yaml  
+    --values ${K8KREATOR_ADDONSDIR}/promtail/values.yaml  
 }
 
 k8kreator-addons-uninstall-promtail() {

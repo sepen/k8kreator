@@ -15,7 +15,7 @@ k8kreator-addons-update-kubewatch() {
     --version ${addon_version} \
     --create-namespace --namespace kubewatch \
     --install --atomic --cleanup-on-fail \
-    --values ${K8KREATOR_SRCDIR}/addons/kubewatch/values.yaml
+    --values ${K8KREATOR_ADDONSDIR}/kubewatch/values.yaml
 }
 
 k8kreator-addons-uninstall-kubewatch() {

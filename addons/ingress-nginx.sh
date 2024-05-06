@@ -15,7 +15,7 @@ k8kreator-addons-update-ingress-nginx() {
     --version ${addon_version} \
     --create-namespace --namespace ingress-nginx \
     --install --atomic --cleanup-on-fail \
-    --values ${K8KREATOR_SRCDIR}/addons/ingress-nginx/values.yaml
+    --values ${K8KREATOR_ADDONSDIR}/ingress-nginx/values.yaml
 }
 
 k8kreator-addons-uninstall-ingress-nginx() {

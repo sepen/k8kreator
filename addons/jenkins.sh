@@ -15,7 +15,7 @@ k8kreator-addons-update-jenkins() {
     --version ${addon_version} \
     --create-namespace --namespace jenkins \
     --install --atomic --cleanup-on-fail \
-    --values ${K8KREATOR_SRCDIR}/addons/jenkins/values.yaml \
+    --values ${K8KREATOR_ADDONSDIR}/jenkins/values.yaml \
     --set controller.ingress.hostName="jenkins.${K8KREATOR_TARGET}"
 }
 

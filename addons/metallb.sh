@@ -84,7 +84,7 @@ k8kreator-addons-update-metallb() {
     --version ${addon_version} \
     --create-namespace --namespace metallb-system \
     --install --atomic --cleanup-on-fail \
-    --values ${K8KREATOR_SRCDIR}/addons/metallb/values.yaml
+    --values ${K8KREATOR_ADDONSDIR}/metallb/values.yaml
   post-install
 }
 

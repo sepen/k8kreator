@@ -15,7 +15,7 @@ k8kreator-addons-update-grafana() {
     --version ${addon_version} \
     --create-namespace --namespace monitoring \
     --install --atomic --cleanup-on-fail \
-    --values ${K8KREATOR_SRCDIR}/addons/grafana/values.yaml \
+    --values ${K8KREATOR_ADDONSDIR}/grafana/values.yaml \
     --set "ingress.hosts={grafana.${K8KREATOR_TARGET}}"
 }
 

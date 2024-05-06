@@ -15,7 +15,7 @@ k8kreator-addons-update-prometheus() {
     --version ${addon_version} \
     --create-namespace --namespace monitoring \
     --install --atomic --cleanup-on-fail \
-    --values ${K8KREATOR_SRCDIR}/addons/prometheus/values.yaml \
+    --values ${K8KREATOR_ADDONSDIR}/prometheus/values.yaml \
     --set "server.ingress.hosts={prometheus.${K8KREATOR_TARGET}}" \
     --set "alertmanager.ingress.hosts[0].host=alertmanager.${K8KREATOR_TARGET}" \
     --set "alertmanager.ingress.hosts[0].paths[0].path=/" \

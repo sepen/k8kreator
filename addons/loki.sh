@@ -15,7 +15,7 @@ k8kreator-addons-update-loki() {
     --version ${addon_version} \
     --create-namespace --namespace monitoring \
     --install --atomic --cleanup-on-fail \
-    --values ${K8KREATOR_SRCDIR}/addons/loki/values.yaml \
+    --values ${K8KREATOR_ADDONSDIR}/loki/values.yaml \
     --set "ingress.hosts={loki.${K8KREATOR_TARGET}}" \
     --set "gateway.ingress.hosts[0].host=gateway.loki.${K8KREATOR_TARGET}"
 }

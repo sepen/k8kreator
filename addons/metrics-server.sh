@@ -15,7 +15,7 @@ k8kreator-addons-update-metrics-server() {
     --version ${addon_version} \
     --create-namespace --namespace kube-system \
     --install --atomic --cleanup-on-fail \
-    --values ${K8KREATOR_SRCDIR}/addons/metrics-server/values.yaml
+    --values ${K8KREATOR_ADDONSDIR}/metrics-server/values.yaml
 }
 
 k8kreator-addons-uninstall-metrics-server() {
