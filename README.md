@@ -46,27 +46,18 @@ $ curl -fsSL https://raw.githubusercontent.com/sepen/k8kreator/main/k8kreator | 
 
 ## Usage
 
+Create a new cluster
 ```
-Usage:
-  k8kreator [command]
-
-Available Commands:
-  self      Install or update k8kreator itself
-  cluster   List, create or delete clusters (it will use K8KREATOR_TARGET)
-  addons    Install, update, list or uninstall addons for the cluster target
-  tools     Install, update, list or uninstall tools for the cluster target
-  version   Print k8kreator version information
-  env       Print k8kreator environment variables
-  help      Print help information
-
-Flags:
-      --debug        Enable debug messages
-      --nocolor      Disable colored output mmessages
-      --version      Print k8kreator version information
-      --env          Print k8kreator environment variables
-  -h, --help         Print help information
-  -t, --target id    Set the cluster target. Overrides K8KREATOR_TARGET from environment variable
+$ k8kreator cluster create
 ```
+
+Install some addons
+```
+$ k8kreator addons install "metrics-server metallb ingress-nginx jenkins"
+```
+
+Run `k8kreator help` for more information
+
 
 ## Targets
 
@@ -115,6 +106,7 @@ Local addons are located in `~/.k8kreator/src/addons`
 
 The idea behind [`k8kreator`](/) is to be able to run clusters with different Kubernetes engines and have a homogeneous way to install and maintain cluster addons. It was primarily designed for testing Kubernetes itself, but may be used for local development or CI (you can use it in production but it's not what it's designed for, so do it at your own risk).
 
+
 ## Troubleshooting
 
 With Docker on _Linux_, you can send traffic directly to the load-balancer’s external IP if the IP space is within the docker IP space.
@@ -122,3 +114,40 @@ With Docker on _Linux_, you can send traffic directly to the load-balancer’s e
 On _macOS_ and _Windows_, docker does not expose the docker network to the host. Because of this limitation, containers (including nodes) are only reachable from the host via port-forwards, however other containers/pods can reach other things running in docker including load-balancers. You may want to check out the [Ingress Guide](https://kind.sigs.k8s.io/docs/user/ingress) as a cross-platform workaround. You can also expose pods and services using extra port mappings.
 
 On _macOS_ you can try [docker-mac-net-connect](https://github.com/chipmk/docker-mac-net-connect) to use a load-balancer's external IP.
+
+
+## Contributing
+
+Pull requests, bug reports, and all other forms of contribution are welcomed and highly encouraged!
+
+### Opening an Issue
+
+Before creating an issue, check if you are using the latest version of the project. If you are not up-to-date, see if updating fixes your issue first.
+
+### Submitting Pull Requests
+
+Before forking the repo and creating a pull request for non-trivial changes, it is usually best to first open an issue to discuss the changes, or discuss your intended approach for solving the problem in the comments for an existing issue.
+
+> Note: All contributions will be licensed under the project's license.
+
+Pull request guidelines:
+
+* **Smaller is better**. Submit one pull request per bug fix or feature. A pull request should contain isolated changes pertaining to a single bug fix or feature implementation. Do not refactor or reformat code that is unrelated to your change. It is better to submit many small pull requests rather than a single large one. Enormous pull requests will take enormous amounts of time to review, or may be rejected altogether.
+
+* **Coordinate bigger changes**. For large and non-trivial changes, open an issue to discuss a strategy with the maintainers. Otherwise, you risk doing a lot of work for nothing!
+
+* **Prioritize understanding over cleverness**. Write code clearly and concisely. Remember that source code usually gets written once and read often. Ensure the code is clear to the reader. The purpose and logic should be obvious to a reasonably skilled developer, otherwise you should add a comment that explains it.
+
+* **Follow existing coding style and conventions**. Keep your code consistent with the style, formatting, and conventions in the rest of the code base. When possible, these will be enforced with a linter. Consistency makes it easier to review and modify in the future.
+
+* **Use spaces**, not tabs.
+
+* **Update the example project** if one exists to exercise any new functionality you have added.
+
+* **Add documentation**. Document your changes with code doc comments or in existing guides.
+
+* **Use the repo's default branch**. Branch from and submit your pull request to the repo's default branch. Usually this is main, but it could be dev, develop, or master.
+
+* **Resolve any merge conflicts** that occur.
+
+
