@@ -62,24 +62,12 @@ Available Commands:
   help      Print help information
 
 Flags:
-      --debug        Enable debug messages
-      --nocolor      Disable colored output mmessages
-      --version      Print k8kreator version information
-      --env          Print k8kreator environment variables
-  -h, --help         Print help information
-  -t, --target ID    Set the cluster target. Overrides K8KREATOR_TARGET from environment variable
-
-Environment variables:
-
-| Name               | Description                                                              |
-|--------------------|--------------------------------------------------------------------------|
-| K8KREATOR_DEBUG    | Indicate whether or not k8kreator is running in Debug mode               |
-| K8KREATOR_HOME     | Alternative path for k8kreator's base directory (default ~/.k8kreator)   |
-| K8KREATOR_TARGET   | Active cluster target. Run 'k8kreator cluster list' to get all available |
-| K8KREATOR_NOCOLOR  | Disable colored output messages. Set K8KREATOR_NOCOLOR=1 to disable      |
-| K8KREATOR_BINDIR   | Alternative path for binary files (default ~/.k8kreator/bin)             |
-| K8KREATOR_SRCDIR   | Alternative path for source directory (default ~/.k8kreator/src)         |
-| K8KREATOR_TMPDIR   | Alternative path for temporary files (default ~/.k8kreator/tmp)          |
+  -t,  --target ID    Overrides K8KREATOR_TARGET from environment variable
+  -d,  --debug        Enable debug messages
+  -nc, --nocolor      Disable colored output mmessages
+  -v,  --version      Print k8kreator version information
+  -e,  --env          Print k8kreator environment variables
+  -h,  --help         Print help information
 __HELP__
   exit 0
 }
@@ -447,10 +435,10 @@ export K8KREATOR_TARGET=${K8KREATOR_TARGET:-k8kreator.kind.local}
 userinput=()
 while [ $1 ]; do
   case $1 in
-    --nocolor) shift && K8KREATOR_NOCOLOR=1 && continue ;;
-    --debug) shift && K8KREATOR_DEBUG=1 && continue;;
-    --version|version) k8kreator-print-version ;;
-    --env|env) k8kreator-print-env ;;
+    -nc|--nocolor) shift && K8KREATOR_NOCOLOR=1 && continue ;;
+    -d|--debug) shift && K8KREATOR_DEBUG=1 && continue;;
+    -v|--version|version) k8kreator-print-version ;;
+    -e|--env|env) k8kreator-print-env ;;
     -h|--help|help) k8kreator-print-help ;;
     -t|--target) shift && K8KREATOR_TARGET=$1 && shift ;;
   esac

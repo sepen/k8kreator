@@ -58,6 +58,18 @@ $ k8kreator addons install "metrics-server metallb ingress-nginx jenkins"
 
 Run `k8kreator help` for more information
 
+## Environment Variables
+
+Run `k8kreator env` to get a complete list of environment variables. Most notable are:
+
+| Variable | Defaults | Description |
+|----------|----------|-------------|
+| K8KREATOR_TARGET | k8kreator.kind.local | Active cluster target. Run 'k8kreator cluster list' to get all available targets |
+| K8KREATOR_DEBUG | 0 | Indicate whether or not k8kreator is running in Debug mode |
+| K8KREATOR_NOCOLOR | 0 | Disable colored output messages. Set K8KREATOR_NOCOLOR=1 to disable |
+| K8KREATOR_BINDIR | $HOME/.k8kreator/bin | Path location for binary files |
+| K8KREATOR_SRCDIR | $HOME/.k8kreator/src | Path location for source files |
+
 
 ## Targets
 
