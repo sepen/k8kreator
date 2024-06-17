@@ -411,7 +411,7 @@ if [ -z "${BASH_VERSION:-}" ]; then
 fi
 
 # Readonly variables
-readonly K8KREATOR_VERSION="0.0.1"
+readonly K8KREATOR_VERSION="0.0.2"
 readonly K8KREATOR_GITHUB_REPO="https://github.com/sepen/k8kreator"
 
 # Other global variables
