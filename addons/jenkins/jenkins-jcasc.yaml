@@ -10,7 +10,7 @@
 #        serviceAccount: jenkins-admin
 #        containers:
 #          - name: base
-#            image: registry.geoblink.io/geoblink/builder-base:0.1.451
+#            image: sepen/crux:latest
 #            command: "/bin/sh -c"
 #            args: "cat"
 #            ttyEnabled: true
