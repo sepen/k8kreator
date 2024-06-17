@@ -42,7 +42,7 @@ k8kreator-print-env() {
   k8kreator-check-deps "env" "grep" "sed"
   k8kreator-msg-debug "Printing k8kreator environment variables"
   env | grep 'K8KREATOR_' | sed 's|=| |' | while read key value; do
-    printf "%-20s %-58s\n" ${key} ${value}
+    printf "%-20s  %-58s\n" ${key} ${value}
   done
   exit 0
 }

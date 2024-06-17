@@ -12,28 +12,25 @@ networking:
   # By default the API server listens on a random open port.
   # You may choose a specific port but probably don't need to in most cases.
   # Using a random port makes it easier to spin up multiple clusters.
-  #apiServerPort: 6443
+  apiServerPort: 6443
 
 nodes:
 
 - role: control-plane
   # https://hub.docker.com/r/kindest/node/tags
-  #kindest/node:v1.29.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245 (multi-platform)
-  image: kindest/node:v1.19.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245
+  image: kindest/node:v1.30.0@sha256:047357ac0cfea04663786a612ba1eaba9702bef25227a794b52890dd8bcd692e
   labels:
     k8kreator-target: k8kreator.kind.local
 
 - role: worker
   # https://hub.docker.com/r/kindest/node/tags
-  #kindest/node:v1.29.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245 (multi-platform)
-  image: kindest/node:v1.19.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245
+  image: kindest/node:v1.30.0@sha256:047357ac0cfea04663786a612ba1eaba9702bef25227a794b52890dd8bcd692e
   labels:
     k8kreator-target: k8kreator.kind.local
 
 - role: worker
   # https://hub.docker.com/r/kindest/node/tags
-  #kindest/node:v1.29.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245 (multi-platform)
-  image: kindest/node:v1.19.2@sha256:51a1434a5397193442f0be2a297b488b6c919ce8a3931be0ce822606ea5ca245
+  image: kindest/node:v1.30.0@sha256:047357ac0cfea04663786a612ba1eaba9702bef25227a794b52890dd8bcd692e
   labels:
     k8kreator-target: k8kreator.kind.local
 
