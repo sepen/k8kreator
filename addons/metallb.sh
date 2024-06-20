@@ -35,9 +35,9 @@ post-install() {
       ;;
   esac
 
-  # We use a static range of 30 addresses (from .20 to .50)
-  ingress_first_addr=$(echo "${base_ip_addr%.*}.20")
-  ingress_last_addr=$(echo "${base_ip_addr%.*}.50")
+  # We use a static range of IP addresses
+  ingress_first_addr=$(echo "${base_ip_addr%.*}.2")
+  ingress_last_addr=$(echo "${base_ip_addr%.*}.255")
   k8kreator-msg-debug "MetalLB ingress address range: $ingress_first_addr-$ingress_last_addr"
 
   # Configure metallb ingress address range
