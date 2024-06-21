@@ -66,7 +66,11 @@ __YAML__
   # the *loadBalancer* IP field of the `ingress-nginx` Service accordingly.
   ${KUBECTL_COMMAND} delete pods,services --all -n metallb-system
   # Give enough time to new pods
-  sleep 10
+  for pod in \
+    $(${KUBECTL_COMMAND} get po -n metallb-system -l 'app.kubernetes.io/component=speaker' -o name) \
+    $(${KUBECTL_COMMAND} get po -n metallb-system -l 'app.kubernetes.io/component=speaker' -o name); do
+    ${KUBECTL_COMMAND} wait -n metallb-system --for=condition=Ready ${pod}
+  done
 }
 
 k8kreator-addons-install-metallb() {
