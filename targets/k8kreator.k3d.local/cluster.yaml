@@ -10,12 +10,7 @@ servers: 1
 agents: 1
 
 # https://hub.docker.com/r/rancher/k3s/tags
-# amd64
-#image: rancher/k3s:v1.30.2-rc3-k3s1@sha256:7402ed606fd167e25947b761709e861bf2a0f01879cf0bc801ddbf0e5c9eef67
-# arm64/v8
-image: rancher/k3s:v1.30.2-rc3-k3s1@sha256:847f34d5119255ddb98cc7c64ea6316bf9373f5eb76296b444d14b2278c61aad
-# arm
-#image: rancher/k3s:v1.30.2-rc3-k3s1@sha256:4c05c27b2b9b1732f7d6ad52a57d4213da27a930bfd0100c54f8114223e67fe8
+image: rancher/k3s:v1.30.2-rc3-k3s1
 
 options:
   k3d:
