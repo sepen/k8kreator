@@ -3,19 +3,9 @@
 k8kreator-tools-install-kubectl() {
   local kubectl_version=$1
   local kubectl_url="https://dl.k8s.io/release/v${kubectl_version}/bin"
-  local system_uname=($(uname -m -s))
- 
-  local system_os=
-  case ${system_uname[0]} in
-    Linux) system_os="linux" ;;
-    Darwin) system_os="darwin" ;;
-  esac
 
-  local system_arch=
-  case ${system_uname[1]} in
-    x86_64|amd64) system_arch="amd64" ;;
-    aarch64|arm64) system_arch="arm64" ;;
-  esac
+  local system_os=$(k8kreator-get-system-os)
+  local system_arch=$(k8kreator-get-system-arch)
 
   kubectl_url="${kubectl_url}/${system_os}/${system_arch}/kubectl"
 
