@@ -67,8 +67,8 @@ __YAML__
   ${KUBECTL_COMMAND} delete pods,services --all -n metallb-system
   # Give enough time to new pods
   for pod in \
-    $(${KUBECTL_COMMAND} get po -n metallb-system -l 'app.kubernetes.io/component=speaker' -o name) \
-    $(${KUBECTL_COMMAND} get po -n metallb-system -l 'app.kubernetes.io/component=speaker' -o name); do
+    $(${KUBECTL_COMMAND} get po -n metallb-system -l 'app.kubernetes.io/component=speaker' --timeout=50s -o name) \
+    $(${KUBECTL_COMMAND} get po -n metallb-system -l 'app.kubernetes.io/component=speaker' --timeout=50s -o name); do
     ${KUBECTL_COMMAND} wait -n metallb-system --for=condition=Ready ${pod}
   done
 }
