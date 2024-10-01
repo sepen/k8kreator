@@ -1,0 +1,49 @@
+# Name:    tempo
+# Chart:   https://github.com/grafana/helm-charts/tree/main/charts/tempo
+# Values:  https://github.com/grafana/helm-charts/tree/main/charts/tempo/values.yaml
+
+replicas: 1
+
+tempo:
+
+  resources: {}
+  #  requests:
+  #    cpu: 1000m
+  #    memory: 4Gi
+  #  limits:
+  #    cpu: 2000m
+  #    memory: 6Gi
+
+  memBallastSizeMbs: 1024
+  multitenancyEnabled: false
+
+  # -- If true, Tempo will report anonymous usage data about the shape of a deployment to Grafana Labs
+  reportingEnabled: false
+
+  metricsGenerator:
+    # -- If true, enables Tempo's metrics generator (https://grafana.com/docs/tempo/next/metrics-generator/)
+    enabled: false
+    remoteWriteUrl: "http://prometheus.monitoring:9090/api/v1/write"
+
+  retention: 24h
+
+tempoQuery:
+  enabled: false
+
+serviceAccount:
+  create: true
+
+service:
+  type: ClusterIP
+
+serviceMonitor:
+  enabled: false
+
+persistence:
+  enabled: false
+
+networkPolicy:
+  enabled: false
+
+# End of file
+

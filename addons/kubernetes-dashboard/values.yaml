@@ -5,14 +5,15 @@
 
 # General configuration shared across resources
 app:
+  mode: 'dashboard'
   ingress:
     enabled: true
     ingressClassName: nginx
     hosts:
       - dashboard
-    paths:
-      web: /
-      api: /api
+    #paths:
+    #  web: /
+    #  api: /api
     issuer:
       # TODO: patch kubernetes-dashboard/templates/networking/post-install-ingress-issuer.yaml
       #name: selfsigned
@@ -66,6 +67,11 @@ metricsScraper:
 metrics-server:
   enabled: false
 
+## Required Kong sub-chart with DBless configuration to act as a gateway
+## for our all containers.
+kong:
+  enabled: true
+
 ## Optional Cert Manager sub-chart configuration
 ## Enable this if you don't already have cert-manager enabled on your cluster.
 cert-manager:
@@ -109,6 +115,5 @@ extras:
   serviceMonitor:
     # Whether to create a Prometheus Operator service monitor.
     enabled: false
-
 
 # End of file

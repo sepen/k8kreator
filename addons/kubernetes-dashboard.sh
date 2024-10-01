@@ -54,7 +54,7 @@ k8kreator-addons-update-kubernetes-dashboard() {
     --install --atomic --cleanup-on-fail \
     --values ${K8KREATOR_ADDONSDIR}/kubernetes-dashboard/values.yaml \
     --set app.ingress.hosts="{dashboard.${K8KREATOR_TARGET}}"
-  post-install
+  [ $? -eq 0 ] && post-install
 }
 
 k8kreator-addons-uninstall-kubernetes-dashboard() {
