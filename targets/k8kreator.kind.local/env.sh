@@ -12,7 +12,7 @@ export K8KREATOR_ADDONS=(
     "prometheus=25.27.0"
     "grafana=8.5.1"
     "promtail=6.16.6"
-    "loki=6.17.0"
+    "loki=6.16.0"
     "tempo=1.10.3"
     "localstack=0.6.16"
 )
