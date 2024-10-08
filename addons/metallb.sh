@@ -19,15 +19,15 @@ post-install() {
   # This pool of IPs must be dedicated to MetalLB's use, you can't reuse the Kubernetes node IPs or IPs handed out by a DHCP server.
 
   # Determine load balancer ingress range depending on the engine in use
-  local base_ip_addr="172.20.0.10"
+  local base_ip_addr="172.18.0.1"
   case ${K8KREATOR_ENGINE} in
     kind)
       k8kreator-check-deps "docker" "sed"
-      base_ip_addr=$(docker network inspect -f '{{range .IPAM.Config}}{{.Subnet}} {{end}}' kind 2>/dev/null | sed 's|/.*||g')
+      base_ip_addr=$(docker network inspect kind -f '{{range .IPAM.Config}}{{.Gateway}} {{end}}' 2>/dev/null | tr ' ' '\n' | grep -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
       ;;
     k3d)
       k8kreator-check-deps "docker" "sed"
-      base_ip_addr=$(docker network inspect -f '{{range .IPAM.Config}}{{.Subnet}} {{end}}' k3d-${K8KREATOR_TARGET} 2>/dev/null | sed 's|/.*||g')
+      base_ip_addr=$(docker network inspect k3d-${K8KREATOR_TARGET} -f '{{range .IPAM.Config}}{{.Gateway}} {{end}}' 2>/dev/null | tr ' ' '\n' | grep -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
       ;;
     minikube)
       minikube_command=$(k8kreator-get-tool-command "minikube")
@@ -45,7 +45,7 @@ post-install() {
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: default
+  name: default-pool
   namespace: metallb-system
 spec:
   addresses:
@@ -59,7 +59,7 @@ metadata:
   namespace: metallb-system
 spec:
   ipAddressPools:
-  - default
+  - default-pool
 __YAML__
 
   # After creating the previous objects, MetalLB takes ownership of one of the IP addresses in the pool and updates

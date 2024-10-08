@@ -1,0 +1,23 @@
+# Name:    localstack
+# Website: https://localstack.cloud/
+# Chart:   https://github.com/localstack/helm-charts
+# Values:  https://github.com/localstack/helm-charts/blob/main/charts/localstack/values.yaml
+
+ingress:
+  enabled: true 
+  ingressClassName: nginx
+  hosts:
+    - host: localstack
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+
+persistence:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 500Mi
+
+# End of file

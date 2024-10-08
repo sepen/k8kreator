@@ -7,8 +7,7 @@ nameOverride: "metallb"
 fullnameOverride: ""
 loadBalancerClass: ""
 
-# To configure MetalLB, you must specify ONE of the following two
-# options.
+# To configure MetalLB, you must specify ONE of the following two options.
 
 rbac:
   # create specifies whether to install and use RBAC rules.

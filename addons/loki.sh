@@ -10,7 +10,7 @@ k8kreator-addons-install-loki() {
 k8kreator-addons-update-loki() {
   k8kreator-msg-debug "Running function k8kreator-addons-update-loki"
   local addon_version=$1
-  ${HELM_COMMAND} upgrade loki loki \
+  ${HELM_COMMAND} upgrade loki loki-stack \
     --repo https://grafana.github.io/helm-charts \
     --version ${addon_version} \
     --create-namespace --namespace monitoring \

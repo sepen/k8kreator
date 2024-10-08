@@ -12,7 +12,13 @@ networking:
   # By default the API server listens on a random open port.
   # You may choose a specific port but probably don't need to in most cases.
   # Using a random port makes it easier to spin up multiple clusters.
-  apiServerPort: 6443
+  #apiServerPort: 6443
+
+# Kubernetes API server runtime-config can be toggled using the runtimeConfig key,
+# which maps to the --runtime-config kube-apiserver flag.
+# This may be used to e.g. disable beta / alpha APIs.
+runtimeConfig:
+  "api/alpha": "false"
 
 nodes:
 

@@ -14,6 +14,7 @@ export K8KREATOR_ADDONS=(
     "promtail=6.16.6"
     "loki=6.17.0"
     "tempo=1.10.3"
+    "localstack=0.6.16"
 )
 
 # End of file
