@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 
-export K8KREATOR_TOOLS=("k3d=5.6.3" "kubectl=1.30.0" "helm=3.15.2")
+export K8KREATOR_TOOLS=("k3d=5.7.4" "kubectl=1.31.0" "helm=3.16.1")
 
 export K8KREATOR_ADDONS=(
     "metrics-server=3.12.1"
-    "metallb=0.14.5"
-    "ingress-nginx=4.10.1"
-    "kubernetes-dashboard=7.3.2"
-    "kubewatch=3.3.10"
-    "jenkins=5.2.2"
-    "prometheus=25.20.1"
-    "grafana=7.3.9"
-    "promtail=6.15.5"
-    "loki=6.4.2"
+    "metallb=0.14.8"
+    "ingress-nginx=4.11.2"
+    "kubernetes-dashboard=7.6.1"
+    "kubewatch=3.5.0"
+    "jenkins=5.7.1"
+    "prometheus=25.27.0"
+    "grafana=8.5.1"
+    "promtail=6.16.6"
+    "loki=6.16.0"
+    "tempo=1.10.3"
+    "localstack=0.6.16"
 )
 
 # End of file
