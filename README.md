@@ -53,7 +53,7 @@ $ k8kreator cluster create
 
 Install some addons
 ```
-$ k8kreator addons install "metrics-server metallb ingress-nginx jenkins"
+$ k8kreator addons install metrics-server metallb ingress-nginx jenkins
 ```
 
 Run `k8kreator help` for more information
@@ -77,9 +77,9 @@ Targets are the reference units to create a cluster (`name.engine.domain`). By d
 
 | Name | Kubernetes | Tools |
 |------|-----------:|-------|
-| [k8kreator.kind.local](targets/k8kreator.kind.local) | 1.29.2 | kind=0.22.0 kubectl=1.30.0 helm=3.14.0 |
-| [k8kreator.k3d.local](targets/k8kreator.k3d.local) | 1.27.4 | k3d=5.6.0 kubectl=1.28.1 helm=3.12.3 |
-| [k8kreator.minikube.local](targets/k8kreator.minikube.local) | 1.26.8 | minikube=1.31.2 kubectl=1.26.8 helm=3.12.3 |
+| [k8kreator.kind.local](targets/k8kreator.kind.local) | v1.31.0 | kind=0.24.0 kubectl=1.31.0 helm=3.16.1 |
+| [k8kreator.k3d.local](targets/k8kreator.k3d.local) | v1.30.2-rc3+k3s1 | k3d=5.7.4 kubectl=1.31.0 helm=3.16.1 |
+| [k8kreator.minikube.local](targets/k8kreator.minikube.local) | v1.31.0 | minikube=1.34.0 kubectl=1.31.0 helm=3.16.1 |
 
 Local targets are located in `~/.k8kreator/src/targets`
 
@@ -105,11 +105,15 @@ Addons are maintained extensions used for added functionality to clusters. At th
 | [ingress-nginx](https://github.com/kubernetes/ingress-nginx/) | An Ingress controller for Kubernetes using Nginx as a reverse proxy and load-balancer |
 | [kubernetes-dashboard](https://github.com/kubernetes/dashboard) | Web-based UI that allows administrators to perform basic operating tasks and review cluster events |
 | [kubewatch](https://github.com/robusta-dev/kubewatch) | Kubernetes watcher that publishes notifications to Slack/hipchat/mattermost/flock channels |
+| [jenkins](https://www.jenkins.io/) | Continuous integration/continuous delivery and deployment (CI/CD) automation software DevOps tool |
 | [prometheus](https://prometheus.io/) | Systems monitoring and alerting toolkit with an active ecosystem. It is the only system directly supported by Kubernetes and the de facto standard across the cloud native ecosystem |
+| [grafana](https://grafana.com/) | Query, visualize, alert on, and explore your metrics, logs, and traces |
 | [promtail](https://grafana.com/docs/loki/latest/send-data/promtail/) | An agent which ships the contents of local logs to a private Grafana Loki instance or Grafana Cloud |
 | [loki](https://grafana.com/docs/loki/latest/) | Horizontally-scalable, highly-available, multi-tenant log aggregation system inspired by Prometheus |
-| [grafana](https://grafana.com/) | Query, visualize, alert on, and explore your metrics, logs, and traces |
-| [jenkins](https://www.jenkins.io/) | Continuous integration/continuous delivery and deployment (CI/CD) automation software DevOps tool |
+| [tempo](https://grafana.com/docs/tempo/latest/) | Easy-to-use, and high-scale distributed tracing backend |
+| [localstack](https://localstack.cloud/) | Cloud service emulator that can run your AWS applications or Lambdas entirely on your local machine |
+
+
 
 Local addons are located in `~/.k8kreator/src/addons`
 
