@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 MINIKUBE_COMMAND=$(k8kreator-get-tool-command "minikube")
-KUBERNETES_VERSION="v1.30.0"
+KUBERNETES_VERSION="v1.31.0"
 
 k8kreator-cluster-create-target() {
   k8kreator-check-deps ${MINIKUBE_COMMAND}
