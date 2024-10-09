@@ -40,17 +40,17 @@ jobs:
           export PATH=$HOME/.k8kreator/bin:$PATH
           k8kreator self-update
 
-      # all.kind.local
+      # k8kreator.kind.local
       - name: Test cluster-create
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
-          k8kreator cluster create -t all.kind.local
+          k8kreator cluster create -t k8kreator.kind.local
           export KUBECONFIG=$HOME/.k8kreator/kubeconfig
           kubectl version
       - name: Test addons-install
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
-          k8kreator addons install -t all.kind.local
+          k8kreator addons install -t k8kreator.kind.local
       - name: Test pods, services and ingresses
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
@@ -61,23 +61,23 @@ jobs:
       - name: Test addons-uninstall
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
-          k8kreator addons uninstall -t all.kind.local
+          k8kreator addons uninstall -t k8kreator.kind.local
       - name: Test cluster-delete
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
-          k8kreator cluster delete -t all.kind.local
+          k8kreator cluster delete -t k8kreator.kind.local
           
-      # all.k3d.local
+      # k8kreator.k3d.local
       - name: Test cluster-create
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
-          k8kreator cluster create -t all.k3d.local
+          k8kreator cluster create -t k8kreator.k3d.local
           export KUBECONFIG=$HOME/.k8kreator/kubeconfig
           kubectl version
       - name: Test addons-install
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
-          k8kreator addons install -t all.k3d.local
+          k8kreator addons install -t k8kreator.k3d.local
       - name: Test pods, services and ingresses
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
@@ -88,23 +88,23 @@ jobs:
       - name: Test addons-uninstall
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
-          k8kreator addons uninstall -t all.k3d.local
+          k8kreator addons uninstall -t k8kreator.k3d.local
       - name: Test cluster-delete
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
-          k8kreator cluster delete -t all.k3d.local
+          k8kreator cluster delete -t k8kreator.k3d.local
 
-      # all.minikube.local
+      # k8kreator.minikube.local
       - name: Test cluster-create
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
-          k8kreator cluster create -t all.minikube.local
+          k8kreator cluster create -t k8kreator.minikube.local
           export KUBECONFIG=$HOME/.k8kreator/kubeconfig
           kubectl version
       - name: Test addons-install
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
-          k8kreator addons install -t all.minikube.local
+          k8kreator addons install -t k8kreator.minikube.local
       - name: Test pods, services and ingresses
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
@@ -115,8 +115,8 @@ jobs:
       - name: Test addons-uninstall
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
-          k8kreator addons uninstall -t all.minikube.local
+          k8kreator addons uninstall -t k8kreator.minikube.local
       - name: Test cluster-delete
         run: |
           export PATH=$HOME/.k8kreator/bin:$PATH
-          k8kreator cluster delete -t all.minikube.local
+          k8kreator cluster delete -t k8kreator.minikube.local

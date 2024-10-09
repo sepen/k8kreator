@@ -36,7 +36,7 @@ Lightweight wrapper to manage Kubernetes clusters
 
 To install [`k8kreator`](/) paste that in a macOS Terminal or Linux shell prompt:
 ```
-$ curl -fsSL https://raw.githubusercontent.com/sepen/k8kreator/main/k8kreator | bash -s self install
+curl -fsSL https://raw.githubusercontent.com/sepen/k8kreator/main/k8kreator | bash -s self install
 ```
 
 * The one-liner command from above installs [`k8kreator`](/) to its default, `$HOME/.k8kreator` and will place some files under that prefix, so you'll need to set your PATH like this `export PATH=$HOME/.k8kreator/bin:$PATH`.
@@ -48,12 +48,12 @@ $ curl -fsSL https://raw.githubusercontent.com/sepen/k8kreator/main/k8kreator | 
 
 Create a new cluster
 ```
-$ k8kreator cluster create
+k8kreator cluster create
 ```
 
 Install some addons
 ```
-$ k8kreator addons install metrics-server metallb ingress-nginx jenkins
+k8kreator addons install metrics-server metallb ingress-nginx jenkins
 ```
 
 Run `k8kreator help` for more information
