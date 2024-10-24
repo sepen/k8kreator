@@ -106,8 +106,7 @@ Addons are maintained extensions used for added functionality to clusters. At th
 | [kubernetes-dashboard](https://github.com/kubernetes/dashboard) | Web-based UI that allows administrators to perform basic operating tasks and review cluster events |
 | [kubewatch](https://github.com/robusta-dev/kubewatch) | Kubernetes watcher that publishes notifications to Slack/hipchat/mattermost/flock channels |
 | [jenkins](https://www.jenkins.io/) | Continuous integration/continuous delivery and deployment (CI/CD) automation software DevOps tool |
-| [prometheus](https://prometheus.io/) | Systems monitoring and alerting toolkit with an active ecosystem. It is the only system directly supported by Kubernetes and the de facto standard across the cloud native ecosystem |
-| [grafana](https://grafana.com/) | Query, visualize, alert on, and explore your metrics, logs, and traces |
+| [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/) | kube-prometheus-stack collects Kubernetes manifests, Grafana dashboards, and Prometheus rules combined with documentation and scripts to provide easy to operate end-to-end Kubernetes cluster monitoring with Prometheus using the Prometheus Operator |
 | [promtail](https://grafana.com/docs/loki/latest/send-data/promtail/) | An agent which ships the contents of local logs to a private Grafana Loki instance or Grafana Cloud |
 | [loki](https://grafana.com/docs/loki/latest/) | Horizontally-scalable, highly-available, multi-tenant log aggregation system inspired by Prometheus |
 | [tempo](https://grafana.com/docs/tempo/latest/) | Easy-to-use, and high-scale distributed tracing backend |
