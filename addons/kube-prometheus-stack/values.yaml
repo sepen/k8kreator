@@ -1,0 +1,96 @@
+# Name:    kube-prometheus-stack
+# Website: https://prometheus.io/
+# Chart:   https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack
+# Values:  https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
+
+crds:
+  enabled: true
+
+defaultRules:
+  create: true
+
+global:
+  rbac:
+    create: true
+
+windowsMonitoring:
+  ## Deploys the windows-exporter and Windows-specific dashboards and rules (job name must be 'windows-exporter')
+  enabled: false
+
+## Configuration for alertmanager: https://prometheus.io/docs/alerting/alertmanager/
+alertmanager:
+  enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+
+  serviceAccount:
+    create: true
+
+  ## Settings affecting alertmanagerSpec
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#alertmanagerspec
+  alertmanagerSpec:
+    ## ForceEnableClusterMode ensures Alertmanager does not deactivate the cluster mode when running with a single replica.
+    forceEnableClusterMode: true
+
+## Using default values from https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
+grafana:
+  enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+
+  serviceAccount:
+    create: true
+    autoMount: true
+
+  sidecar:
+    dashboards:
+      enabled: true
+
+kubernetesServiceMonitors:
+  enabled: true
+
+kubeApiServer:
+  enabled: true
+
+kubelet:
+  enabled: true
+
+kubeControllerManager:
+  enabled: true
+
+## Component scraping coreDns. Use either this or kubeDns
+coreDns:
+  enabled: true
+kubeDns:
+  enabled: false
+
+kubeEtcd:
+  enabled: true
+
+kubeProxy:
+  enabled: true
+
+kubeStateMetrics:
+  enabled: true
+
+nodeExporter:
+  enabled: true
+
+prometheusOperator:
+  enabled: true
+
+prometheus:
+  enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+
+## Configuration for thanosRuler: https://thanos.io/tip/components/rule.md/
+thanosRuler:
+  enabled: false
+
+## Setting to true produces cleaner resource names, but requires a data migration because the name of the persistent volume changes.
+## Therefore this should only be set once on initial installation.
+cleanPrometheusOperatorObjectNames: false
