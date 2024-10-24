@@ -40,6 +40,9 @@ post-install() {
   ingress_last_addr=$(echo "${base_ip_addr%.*}.255")
   k8kreator-msg-debug "MetalLB ingress address range: $ingress_first_addr-$ingress_last_addr"
 
+  # Delete previous resources
+  ${KUBECTL_COMMAND} delete ipaddresspools.metallb.io,l2advertisements.metallb.io --all -n metallb-system
+
   # Configure metallb ingress address range
   cat << __YAML__ | ${KUBECTL_COMMAND} apply -f -
 apiVersion: metallb.io/v1beta1
@@ -67,10 +70,19 @@ __YAML__
   ${KUBECTL_COMMAND} delete pods,services --all -n metallb-system
   # Give enough time to new pods
   for pod in \
-    $(${KUBECTL_COMMAND} get po -n metallb-system -l 'app.kubernetes.io/component=speaker' -o name) \
+    $(${KUBECTL_COMMAND} get po -n metallb-system -l 'app.kubernetes.io/component=controller' -o name) \
     $(${KUBECTL_COMMAND} get po -n metallb-system -l 'app.kubernetes.io/component=speaker' -o name); do
+    k8kreator-msg-debug "Waiting for ${pod} to be ready"
     ${KUBECTL_COMMAND} wait -n metallb-system --for=condition=Ready ${pod} --timeout=60s
   done
+
+  # Check ingress-nginx service of type LoadBalancer
+  case $(${KUBECTL_COMMAND} get svc -n ingress-nginx ingress-nginx-controller -o "jsonpath={.spec.type}" 2>/dev/null) in
+    "LoadBalancer")
+      k8kreator-msg-info "IMPORTANT: An ingress-nginx service of type LoadBalancer has been detected."
+      k8kreator-msg-info "You may need to update this service for metallb changes to work properly."
+      ;;
+  esac
 }
 
 k8kreator-addons-install-metallb() {
