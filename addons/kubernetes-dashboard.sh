@@ -53,7 +53,7 @@ k8kreator-addons-update-kubernetes-dashboard() {
     --create-namespace --namespace kubernetes-dashboard \
     --install --atomic --cleanup-on-fail \
     --values ${K8KREATOR_ADDONSDIR}/kubernetes-dashboard/values.yaml \
-    --set app.ingress.hosts="{dashboard.${K8KREATOR_TARGET}}"
+    --set "app.ingress.hosts[0]=dashboard.${K8KREATOR_TARGET}"
   [ $? -eq 0 ] && post-install
 }
 
