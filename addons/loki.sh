@@ -3,12 +3,10 @@
 HELM_COMMAND=$(k8kreator-get-tool-command "helm")
 
 k8kreator-addons-install-loki() {
-  k8kreator-msg-debug "Running function k8kreator-addons-install-loki $@ (${K8KREATOR_TARGET})"
   k8kreator-addons-update-loki $@
 }
 
 k8kreator-addons-update-loki() {
-  k8kreator-msg-debug "Running function k8kreator-addons-update-loki"
   local addon_version=$1
   ${HELM_COMMAND} upgrade loki loki \
     --repo https://grafana.github.io/helm-charts \
@@ -21,7 +19,6 @@ k8kreator-addons-update-loki() {
 }
 
 k8kreator-addons-uninstall-loki() {
-  k8kreator-msg-debug "Running function k8kreator-addons-uninstall-loki"
   local addon_version=$1
   ${HELM_COMMAND} uninstall loki \
     --namespace monitoring

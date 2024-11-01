@@ -38,7 +38,7 @@ post-install() {
   # We use a static range of IP addresses
   ingress_first_addr=$(echo "${base_ip_addr%.*}.2")
   ingress_last_addr=$(echo "${base_ip_addr%.*}.255")
-  k8kreator-msg-debug "MetalLB ingress address range: $ingress_first_addr-$ingress_last_addr"
+  k8kreator-msg-verbose "MetalLB ingress address range: $ingress_first_addr-$ingress_last_addr"
 
   # Delete previous resources
   ${KUBECTL_COMMAND} delete ipaddresspools.metallb.io,l2advertisements.metallb.io --all -n metallb-system
@@ -72,7 +72,7 @@ __YAML__
   for pod in \
     $(${KUBECTL_COMMAND} get po -n metallb-system -l 'app.kubernetes.io/component=controller' -o name) \
     $(${KUBECTL_COMMAND} get po -n metallb-system -l 'app.kubernetes.io/component=speaker' -o name); do
-    k8kreator-msg-debug "Waiting for ${pod} to be ready"
+    k8kreator-msg-verbose "Waiting for ${pod} to be ready"
     ${KUBECTL_COMMAND} wait -n metallb-system --for=condition=Ready ${pod} --timeout=60s
   done
 
@@ -86,13 +86,10 @@ __YAML__
 }
 
 k8kreator-addons-install-metallb() {
-  k8kreator-msg-debug "Running function k8kreator-addons-install-metallb"
-  # Helm install and upgrade are bassically the same. It just require some helm flags like -i
   k8kreator-addons-update-metallb $@
 }
 
 k8kreator-addons-update-metallb() {
-  k8kreator-msg-debug "Running function k8kreator-addons-update-metallb"
   local addon_version=$1
   pre-install
   ${HELM_COMMAND} upgrade metallb metallb \
@@ -105,7 +102,6 @@ k8kreator-addons-update-metallb() {
 }
 
 k8kreator-addons-uninstall-metallb() {
-  k8kreator-msg-debug "Running function k8kreator-addons-uninstall-metallb"
   local addon_version=$1
   ${HELM_COMMAND} uninstall metallb \
     --namespace metallb-system

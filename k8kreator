@@ -13,19 +13,28 @@ k8kreator-msg-debug() {
   fi
 }
 
-k8kreator-msg-info() {
-  local msgprefix='\033[1;34m**'
-  local msgsuffix='\033[0m'
-  [ ${K8KREATOR_NOCOLOR} -eq 1 ] && msgprefix='**'
-  echo -e "${msgprefix}${msgsuffix} $@"
-}
-
 k8kreator-msg-error() {
   local msgprefix='\033[1;31m**'
   local msgsuffix='\033[0m'
   [ ${K8KREATOR_NOCOLOR} -eq 1 ] && msgprefix='[error]'
   echo -e "${msgprefix}${msgsuffix} $@" 2>&1
   exit 1
+}
+
+k8kreator-msg-verbose() {
+  local msgprefix='\033[1;36m**'
+  local msgsuffix='\033[0m'
+  if [ ${K8KREATOR_VERBOSE} -eq 1 ]; then
+    [ ${K8KREATOR_NOCOLOR} -eq 1 ] && msgprefix='**'
+    echo -e "${msgprefix}${msgsuffix} $@"
+  fi
+}
+
+k8kreator-msg-info() {
+  local msgprefix='\033[1;34m**'
+  local msgsuffix='\033[0m'
+  [ ${K8KREATOR_NOCOLOR} -eq 1 ] && msgprefix='**'
+  echo -e "${msgprefix}${msgsuffix} $@"
 }
 
 k8kreator-print-version() {
@@ -64,8 +73,9 @@ Available Commands:
 Flags:
   -t,  --target ID    Overrides K8KREATOR_TARGET from environment variable
   -d,  --debug        Enable debug messages
-  -nc, --nocolor      Disable colored output mmessages
-  -v,  --version      Print k8kreator version information
+  -v,  --verbose      Enable verbose messages
+  -nc, --nocolor      Disable color messages
+  -V,  --version      Print k8kreator version information
   -e,  --env          Print k8kreator environment variables
   -h,  --help         Print help information
 __HELP__
@@ -219,7 +229,7 @@ k8kreator-addons-list() {
   k8kreator-msg-debug "Running function k8kreator-addons-list"
   k8kreator-check-deps "find"
   source ${K8KREATOR_TARGETSDIR}/${K8KREATOR_TARGET}/env.sh
-  k8kreator-msg-info "Listing addons for target ${K8KREATOR_TARGET}:"
+  k8kreator-msg-info "Listing addons for target ${K8KREATOR_TARGET}"
   find ${K8KREATOR_ADDONSDIR} -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
   | while read available_addon_name; do
     # Check if the addon is available for selected target
@@ -228,7 +238,7 @@ k8kreator-addons-list() {
         ${available_addon_name}=*)
           target_addon_name=${target_addon%%=*}
           target_addon_version=${target_addon##*=}
-          printf "%-20s  %s\n" ${target_addon_name} ${target_addon_version}
+          printf "%-24s  %s\n" ${target_addon_name} ${target_addon_version}
           ;;
       esac
     done
@@ -429,12 +439,13 @@ if [ -z "${BASH_VERSION:-}" ]; then
 fi
 
 # Readonly variables
-readonly K8KREATOR_VERSION="0.0.2"
+readonly K8KREATOR_VERSION="0.0.3"
 readonly K8KREATOR_GITHUB_REPO="https://github.com/sepen/k8kreator"
 
 # Other global variables
 export K8KREATOR_NOCOLOR=${K8KREATOR_NOCOLOR:-0}
 export K8KREATOR_DEBUG=${K8KREATOR_DEBUG:-0}
+export K8KREATOR_VERBOSE=${K8KREATOR_VERBOSE:-0}
 export K8KREATOR_HOME="${K8KREATOR_HOME:-${HOME}/.k8kreator}"
 export K8KREATOR_BINDIR="${K8KREATOR_BINDIR:-${K8KREATOR_HOME}/bin}"
 export K8KREATOR_SRCDIR="${K8KREATOR_SRCDIR:-${K8KREATOR_HOME}/src}"
@@ -454,8 +465,9 @@ userinput=()
 while [ $1 ]; do
   case $1 in
     -nc|--nocolor) shift && K8KREATOR_NOCOLOR=1 && continue ;;
-    -d|--debug) shift && K8KREATOR_DEBUG=1 && continue;;
-    -v|--version|version) k8kreator-print-version ;;
+    -d|--debug) shift && K8KREATOR_DEBUG=1 && continue ;;
+    -v|--verbose) shift && K8KREATOR_VERBOSE=1 && continue ;;
+    -V|--version|version) k8kreator-print-version ;;
     -e|--env|env) k8kreator-print-env ;;
     -h|--help|help) k8kreator-print-help ;;
     -t|--target) shift && K8KREATOR_TARGET=$1 && shift ;;

@@ -15,12 +15,10 @@ post-install() {
 }
 
 k8kreator-addons-install-localstack() {
-  k8kreator-msg-debug "Running function k8kreator-addons-install-localstack $@ (${K8KREATOR_TARGET})"
   k8kreator-addons-update-localstack $@
 }
 
 k8kreator-addons-update-localstack() {
-  k8kreator-msg-debug "Running function k8kreator-addons-update-localstack"
   local addon_version=$1
   ${HELM_COMMAND} upgrade localstack localstack \
     --repo https://helm.localstack.cloud \
@@ -33,7 +31,6 @@ k8kreator-addons-update-localstack() {
 }
 
 k8kreator-addons-uninstall-localstack() {
-  k8kreator-msg-debug "Running function k8kreator-addons-uninstall-localstack"
   local addon_version=$1
   ${HELM_COMMAND} uninstall localstack \
     --namespace localstack

@@ -3,12 +3,10 @@
 HELM_COMMAND=$(k8kreator-get-tool-command "helm")
 
 k8kreator-addons-install-kube-prometheus-stack() {
-  k8kreator-msg-debug "Running function k8kreator-addons-install-kube-prometheus-stack $@ (${K8KREATOR_TARGET})"
   k8kreator-addons-update-kube-prometheus-stack $@
 }
 
 k8kreator-addons-update-kube-prometheus-stack() {
-  k8kreator-msg-debug "Running function k8kreator-addons-update-kube-prometheus-stack"
   local addon_version=$1
   ${HELM_COMMAND} upgrade kube-prometheus-stack kube-prometheus-stack \
     --repo https://prometheus-community.github.io/helm-charts \
@@ -22,7 +20,6 @@ k8kreator-addons-update-kube-prometheus-stack() {
 }
 
 k8kreator-addons-uninstall-kube-prometheus-stack() {
-  k8kreator-msg-debug "Running function k8kreator-addons-uninstall-kube-prometheus-stack"
   local addon_version=$1
   ${HELM_COMMAND} uninstall kube-prometheus-stack \
     --namespace monitoring

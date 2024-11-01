@@ -33,18 +33,16 @@ __YAML__
 }
 
 post-install() {
-  k8kreator-msg-debug "Getting a Bearer Token for ServiceAccount"
+  k8kreator-msg-verbose "Getting a Bearer Token for ServiceAccount"
   k8kreator-msg-info "IMPORTANT: Bearer Token that can be used to log in to Dashboard"
   ${KUBECTL_COMMAND} -n kubernetes-dashboard create token admin-user
 }
 
 k8kreator-addons-install-kubernetes-dashboard() {
-  k8kreator-msg-debug "Running function k8kreator-addons-install-kubernetes-dashboard $@ (${K8KREATOR_TARGET})"
   k8kreator-addons-update-kubernetes-dashboard $@
 }
 
 k8kreator-addons-update-kubernetes-dashboard() {
-  k8kreator-msg-debug "Running function k8kreator-addons-update-kubernetes-dashboard $@ (${K8KREATOR_TARGET})"
   local addon_version=$1
   pre-install
   ${HELM_COMMAND} upgrade kubernetes-dashboard kubernetes-dashboard \
@@ -58,7 +56,6 @@ k8kreator-addons-update-kubernetes-dashboard() {
 }
 
 k8kreator-addons-uninstall-kubernetes-dashboard() {
-  k8kreator-msg-debug "Running function k8kreator-addons-uninstall-kubernetes-dashboard $@ (${K8KREATOR_TARGET})"
   local addon_version=$1
   ${HELM_COMMAND} uninstall kubernetes-dashboard \
     --namespace kubernetes-dashboard
