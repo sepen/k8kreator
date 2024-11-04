@@ -118,7 +118,8 @@ k8kreator-get-addon-version() {
   local addon_name=$1
   # it returns addon version
   source ${K8KREATOR_TARGETSDIR}/${K8KREATOR_TARGET}/env.sh
-  for addon in ${K8KREATOR_ADDONS[@]}; do
+  source ${K8KREATOR_TARGETSDIR}/common.sh
+  for addon in ${K8KREATOR_TARGET_ADDONS[@]} ${K8KREATOR_COMMON_ADDONS[@]}; do
     case ${addon} in
       ${addon_name}=*) echo "${addon##*=}" ;;
     esac
@@ -129,7 +130,8 @@ k8kreator-get-tool-version() {
   local tool_name=$1
   # it returns tool version
   source ${K8KREATOR_TARGETSDIR}/${K8KREATOR_TARGET}/env.sh
-  for tool in ${K8KREATOR_TOOLS[@]}; do
+  source ${K8KREATOR_TARGETSDIR}/common.sh
+  for tool in ${K8KREATOR_TARGET_TOOLS[@]} ${K8KREATOR_COMMON_TOOLS[@]}; do
     case ${tool} in
       ${tool_name}=*) echo "${tool##*=}" ;;
     esac
@@ -194,7 +196,7 @@ k8kreator-cluster-create() {
     k8kreator-msg-error "Cluster target not found ${K8KREATOR_TARGET}"
   fi
   source ${K8KREATOR_TARGETSDIR}/${K8KREATOR_TARGET}/target.sh
-  k8kreator-msg-info "Installing and selecting tools"
+  k8kreator-msg-info "Installing and selecting target tools"
   k8kreator-tools-install
   k8kreator-tools-select
   k8kreator-msg-info "Creating cluster ${K8KREATOR_TARGET}"
@@ -216,7 +218,7 @@ k8kreator-cluster-delete() {
   source ${K8KREATOR_TARGETSDIR}/${K8KREATOR_TARGET}/target.sh
   k8kreator-msg-info "Deleting cluster ${K8KREATOR_TARGET}"
   k8kreator-cluster-delete-target
-  k8kreator-msg-info "Uninstalling tools"
+  k8kreator-msg-info "Uninstalling target tools"
   k8kreator-tools-uninstall
   k8kreator-msg-info "Deleted successfully!"
 }
@@ -228,21 +230,26 @@ k8kreator-cluster-delete() {
 k8kreator-addons-list() {
   k8kreator-msg-debug "Running function k8kreator-addons-list"
   k8kreator-check-deps "find"
+  # First show a list of addons for the selected target (K8KREATOR_TARGET_ADDONS)
   source ${K8KREATOR_TARGETSDIR}/${K8KREATOR_TARGET}/env.sh
-  k8kreator-msg-info "Listing addons for target ${K8KREATOR_TARGET}"
-  find ${K8KREATOR_ADDONSDIR} -mindepth 1 -maxdepth 1 -type d -exec basename {} \; \
-  | while read available_addon_name; do
-    # Check if the addon is available for selected target
-    for target_addon in ${K8KREATOR_ADDONS[@]}; do
-      case ${target_addon} in
-        ${available_addon_name}=*)
-          target_addon_name=${target_addon%%=*}
-          target_addon_version=${target_addon##*=}
-          printf "%-24s  %s\n" ${target_addon_name} ${target_addon_version}
-          ;;
-      esac
+  if [ ${#K8KREATOR_TARGET_ADDONS[@]} -ne 0 ]; then
+    k8kreator-msg-info "Addons for target ${K8KREATOR_TARGET}"
+    for target_addon in ${K8KREATOR_TARGET_ADDONS[@]}; do
+      target_addon_name=${target_addon%%=*}
+      target_addon_version=${target_addon##*=}
+      printf "%-24s  %s\n" ${target_addon_name} ${target_addon_version}
     done
-  done
+  fi
+  # Second show a list of common tools
+  source ${K8KREATOR_TARGETSDIR}/common.sh
+  if [ ${#K8KREATOR_COMMON_ADDONS[@]} -ne 0 ]; then
+    k8kreator-msg-info "Addons for all targets"
+    for common_addon in ${K8KREATOR_COMMON_ADDONS[@]}; do
+      common_addon_name=${common_addon%%=*}
+      common_addon_version=${common_addon##*=}
+      printf "%-24s  %s\n" ${common_addon_name} ${common_addon_version}
+    done
+  fi
 }
 
 k8kreator-addons-install() {
@@ -256,7 +263,8 @@ k8kreator-addons-install() {
       addons+=" ${addon_name}=${addon_version}"
     done
     K8KREATOR_ADDONS=(${addons})
-    k8kreator-msg-debug "Selected addons: ${K8KREATOR_ADDONS}"
+  else
+    K8KREATOR_ADDONS=${K8KREATOR_TARGET_ADDONS[@]}
   fi
   # Update selected addons
   for addon in ${K8KREATOR_ADDONS[@]}; do
@@ -284,7 +292,8 @@ k8kreator-addons-update() {
       addons+=" ${addon_name}=${addon_version}"
     done
     K8KREATOR_ADDONS=(${addons})
-    k8kreator-msg-debug "Selected addons: ${K8KREATOR_ADDONS}"
+  else
+    K8KREATOR_ADDONS=${K8KREATOR_TARGET_ADDONS[@]}
   fi
   # Update selected addons
   for addon in ${K8KREATOR_ADDONS[@]}; do
@@ -312,7 +321,8 @@ k8kreator-addons-uninstall() {
       addons+=" ${addon_name}=${addon_version}"
     done
     K8KREATOR_ADDONS=(${addons})
-    k8kreator-msg-debug "Selected addons: ${K8KREATOR_ADDONS}"
+  else
+    K8KREATOR_ADDONS=${K8KREATOR_TARGET_ADDONS[@]}
   fi
   # Update selected addons
   for addon in ${K8KREATOR_ADDONS[@]}; do
@@ -336,27 +346,32 @@ k8kreator-addons-uninstall() {
 k8kreator-tools-list() {
   k8kreator-msg-debug "Running function k8kreator-tools-list"
   k8kreator-check-deps "find"
+  # First show a list of tools for the selected target (K8KREATOR_TARGET_TOOLS)
   source ${K8KREATOR_TARGETSDIR}/${K8KREATOR_TARGET}/env.sh
-  k8kreator-msg-info "Listing tools for target ${K8KREATOR_TARGET}:"
-  find ${K8KREATOR_TOOLSDIR} -type f -name '*.sh' -exec basename {} .sh \; \
-  | while read available_tool_name; do
-    # Check if the tool is available for selected target
-    for target_tool in ${K8KREATOR_TOOLS[@]}; do
-      case ${target_tool} in
-        ${available_tool_name}*)
-          target_tool_name=${target_tool%%=*}
-          target_tool_version=${target_tool##*=}
-          printf "%-20s  %s\n" ${target_tool_name} ${target_tool_version}
-          ;;
-      esac
+  if [ ${#K8KREATOR_TARGET_TOOLS[@]} -ne 0 ]; then
+    k8kreator-msg-info "Tools for target ${K8KREATOR_TARGET}"
+    for target_tool in ${K8KREATOR_TARGET_TOOLS[@]}; do
+      target_tool_name=${target_tool%%=*}
+      target_tool_version=${target_tool##*=}
+      printf "%-24s  %s\n" ${target_tool_name} ${target_tool_version}
     done
-  done
-
+  fi
+  # Second show a list of common tools
+  source ${K8KREATOR_TARGETSDIR}/common.sh
+  if [ ${#K8KREATOR_COMMON_TOOLS[@]} -ne 0 ]; then
+    k8kreator-msg-info "Tools for all targets"
+    for common_tool in ${K8KREATOR_COMMON_TOOLS[@]}; do
+      common_tool_name=${common_tool%%=*}
+      common_tool_version=${common_tool##*=}
+      printf "%-24s  %s\n" ${common_tool_name} ${common_tool_version}
+    done
+  fi
 }
 
 k8kreator-tools-install() {
   k8kreator-msg-debug "Running function k8kreator-tools-install $@"
   source ${K8KREATOR_TARGETSDIR}/${K8KREATOR_TARGET}/env.sh
+  source ${K8KREATOR_TARGETSDIR}/common.sh
   # Overaly list with input args
   if [ $# -ne 0 ]; then
     tools=()
@@ -365,8 +380,10 @@ k8kreator-tools-install() {
       tools+=" ${tool_name}=${tool_version}"
     done
     K8KREATOR_TOOLS=(${tools})
+  else
+    K8KREATOR_TOOLS=${K8KREATOR_TARGET_TOOLS[@]}
   fi
-  # Install selected tools
+  # Update selected tools
   for tool in ${K8KREATOR_TOOLS[@]}; do
     tool_name=${tool%%=*}
     tool_version=${tool##*=}
@@ -375,13 +392,16 @@ k8kreator-tools-install() {
     fi
     source ${K8KREATOR_TOOLSDIR}/${tool_name}.sh
     k8kreator-msg-info "Installing tool ${tool_name} ${tool_version}"
-    k8kreator-tools-install-${tool_name} ${tool_version} || k8kreator-msg-error "Install failed"
+    if ! k8kreator-tools-install-${tool_name} ${tool_version}; then
+      k8kreator-msg-error "Failed to install tool ${tool_name} (${tool_version})"
+    fi
   done
 }
 
 k8kreator-tools-select() {
   k8kreator-msg-debug "Running function k8kreator-tools-select $@"
   source ${K8KREATOR_TARGETSDIR}/${K8KREATOR_TARGET}/env.sh
+  source ${K8KREATOR_TARGETSDIR}/common.sh
   # Overaly list with input args
   if [ $# -ne 0 ]; then
     tools=()
@@ -390,6 +410,8 @@ k8kreator-tools-select() {
       tools+=("${tool_name}=${tool_version}")
     done
     K8KREATOR_TOOLS=(${tools})
+  else
+    K8KREATOR_TOOLS=${K8KREATOR_TARGET_TOOLS[@]}
   fi
   # Update selected tools
   for tool in ${K8KREATOR_TOOLS[@]}; do
@@ -407,6 +429,7 @@ k8kreator-tools-select() {
 k8kreator-tools-uninstall() {
   k8kreator-msg-debug "Running function k8kreator-tools-uninstall $@"
   source ${K8KREATOR_TARGETSDIR}/${K8KREATOR_TARGET}/env.sh
+  source ${K8KREATOR_TARGETSDIR}/common.sh
   # Overaly list with input args
   if [ $# -ne 0 ]; then
     tools=()
@@ -415,6 +438,8 @@ k8kreator-tools-uninstall() {
       tools+=("${tool_name}=${tool_version}")
     done
     K8KREATOR_TOOLS=(${tools})
+  else
+    K8KREATOR_TOOLS=${K8KREATOR_TARGET_TOOLS[@]}
   fi
   # Uninstall selected tools
   for tool in ${K8KREATOR_TOOLS[@]}; do
@@ -439,7 +464,7 @@ if [ -z "${BASH_VERSION:-}" ]; then
 fi
 
 # Readonly variables
-readonly K8KREATOR_VERSION="0.0.3"
+readonly K8KREATOR_VERSION="0.0.4"
 readonly K8KREATOR_GITHUB_REPO="https://github.com/sepen/k8kreator"
 
 # Other global variables
@@ -503,7 +528,6 @@ export KUBECONFIG=${K8KREATOR_HOME}/kubeconfig
 if ! declare -f ${K8KREATOR_FUNCTION} >/dev/null 2>&1; then
   k8kreator-print-help
 fi
-
 
 # Execute function
 ${K8KREATOR_FUNCTION} ${K8KREATOR_FUNCTION_ARGS}
